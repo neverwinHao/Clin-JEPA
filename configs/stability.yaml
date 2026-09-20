@@ -1,0 +1,57 @@
+embedding_dir: ${CLIN_JEPA_DATA}/embeddings
+rollout_dir: ${CLIN_JEPA_OUTPUT}/rollout
+output_dir: ${CLIN_JEPA_OUTPUT}/stability
+
+context: 24
+horizon: 48
+dynamic_windows: 4000
+subspace_dim: 64
+bootstrap:
+  draws: 2000
+  seed: 20368
+
+reference: clin_jepa
+
+models:
+  clin_jepa:
+    label: Clin-JEPA (ours)
+    group: paradigm
+    encoder: clin_jepa
+    rollouts: [clin_jepa]
+    bootstrap_seed: 4210229074
+  vjepa2ac:
+    label: V-JEPA 2-AC style
+    group: paradigm
+    encoder: vjepa2ac
+    rollouts: [vjepa2ac]
+    bootstrap_seed: 988435263
+  sft_baseline:
+    label: SFT baseline w/o JEPA
+    group: paradigm
+    encoder: sft_baseline
+    rollouts: [sft_baseline]
+    bootstrap_seed: 3438489542
+  separate_predictor:
+    label: Clin-JEPA w/ separately trained predictor
+    group: ablation
+    encoder: clin_jepa
+    rollouts: [separate_seed_42, separate_seed_1337, separate_seed_2026]
+    bootstrap_seed: 529864077
+  no_warmup:
+    label: Clin-JEPA w/o warmup
+    group: ablation
+    encoder: no_warmup
+    rollouts: [no_warmup]
+    bootstrap_seed: 4004788292
+  no_alignment:
+    label: Clin-JEPA w/o alignment
+    group: ablation
+    encoder: no_alignment
+    rollouts: [no_alignment]
+    bootstrap_seed: 2697702520
+
+checkpoints:
+  - {rollout: clin_jepa_after_warmup, label: after Phase 1, step: 3072, encoder: sft_baseline}
+  - {rollout: clin_jepa_after_co_training, label: after Phase 2, step: 6144, encoder: clin_jepa}
+  - {rollout: clin_jepa_after_alignment, label: after Phase 3, step: 7168, encoder: clin_jepa}
+  - {rollout: clin_jepa, label: after Phase 5 (published), step: 11776, encoder: clin_jepa}

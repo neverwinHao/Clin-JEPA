@@ -1,0 +1,95 @@
+data_dir: ${CLIN_JEPA_DATA}
+output_dir: ${CLIN_JEPA_OUTPUT}/downstream
+mimic_dir: ${MIMIC_RAW}
+mapping_dir: ${MIMIC_CODE}/mimic-iv/mapping
+model_dir: ${CLMBR_MODEL}
+
+n_workers: 8
+
+patients_per_shard: 2000
+max_tokens: 496
+
+readout:
+  seed: 42
+  defaults: {widths: [], dropout: 0.0, l2: 0.0, batch_size: 4096, max_epochs: 50, patience: 8, standardize: true,
+             warmup_fraction: null, eval_batch_size: 8192}
+  configurations:
+    - {lr: 1.0e-3, weight_decay: 1.0e-4}
+    - {lr: 1.0e-3, weight_decay: 1.0e-3}
+    - {lr: 1.0e-3, weight_decay: 0.01}
+    - {lr: 1.0e-3, weight_decay: 0.1}
+    - {widths: [512], dropout: 0.1, lr: 1.0e-3, weight_decay: 1.0e-4}
+    - {widths: [512], dropout: 0.1, lr: 3.0e-4, weight_decay: 0.01}
+    - {widths: [512], dropout: 0.3, lr: 1.0e-3, weight_decay: 1.0e-4}
+    - {widths: [512], dropout: 0.3, lr: 3.0e-4, weight_decay: 0.01}
+    - {widths: [512, 512], dropout: 0.1, lr: 1.0e-3, weight_decay: 1.0e-4}
+    - {widths: [512, 512], dropout: 0.1, lr: 3.0e-4, weight_decay: 0.01}
+    - {widths: [512, 512], dropout: 0.3, lr: 1.0e-3, weight_decay: 1.0e-4}
+    - {widths: [512, 512], dropout: 0.3, lr: 3.0e-4, weight_decay: 0.01}
+    - {widths: [2048], dropout: 0.1, lr: 1.0e-3, weight_decay: 1.0e-4}
+    - {widths: [2048], dropout: 0.1, lr: 3.0e-4, weight_decay: 0.01}
+    - {widths: [2048], dropout: 0.3, lr: 1.0e-3, weight_decay: 1.0e-4}
+    - {widths: [2048], dropout: 0.3, lr: 3.0e-4, weight_decay: 0.01}
+    - {widths: [2048, 2048], dropout: 0.1, lr: 1.0e-3, weight_decay: 1.0e-4}
+    - {widths: [2048, 2048], dropout: 0.1, lr: 3.0e-4, weight_decay: 0.01}
+    - {widths: [2048, 2048], dropout: 0.3, lr: 1.0e-3, weight_decay: 1.0e-4}
+    - {widths: [2048, 2048], dropout: 0.3, lr: 3.0e-4, weight_decay: 0.01}
+    - {lr: 1.0e-3, weight_decay: 0.0, l2: 1.0e-6}
+    - {lr: 1.0e-3, weight_decay: 0.0, l2: 1.0e-5}
+    - {lr: 1.0e-3, weight_decay: 0.0, l2: 1.0e-4}
+    - {lr: 1.0e-3, weight_decay: 0.0, l2: 1.0e-3}
+    - {lr: 1.0e-3, weight_decay: 0.0, l2: 0.01}
+    - {widths: [2048, 512], dropout: 0.2, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.1,
+       batch_size: 8192, max_epochs: 30, patience: 5, standardize: false}
+    - {widths: [2048, 512], dropout: 0.1, lr: 3.0e-4, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [2048, 512], dropout: 0.1, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [2048, 512], dropout: 0.3, lr: 3.0e-4, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [2048, 512], dropout: 0.3, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [4096, 1024], dropout: 0.1, lr: 3.0e-4, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [4096, 1024], dropout: 0.1, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [4096, 1024], dropout: 0.3, lr: 3.0e-4, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [4096, 1024], dropout: 0.3, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [1024, 256], dropout: 0.1, lr: 3.0e-4, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [1024, 256], dropout: 0.1, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [1024, 256], dropout: 0.3, lr: 3.0e-4, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [1024, 256], dropout: 0.3, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [4096], dropout: 0.1, lr: 3.0e-4, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [4096], dropout: 0.1, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [4096], dropout: 0.3, lr: 3.0e-4, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [4096], dropout: 0.3, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [4096, 4096], dropout: 0.1, lr: 3.0e-4, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [4096, 4096], dropout: 0.1, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [4096, 4096], dropout: 0.3, lr: 3.0e-4, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [4096, 4096], dropout: 0.3, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [2048, 2048, 2048], dropout: 0.1, lr: 3.0e-4, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [2048, 2048, 2048], dropout: 0.1, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [2048, 2048, 2048], dropout: 0.3, lr: 3.0e-4, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [2048, 2048, 2048], dropout: 0.3, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [512, 512], dropout: 0.3, lr: 3.0e-3, weight_decay: 0.01, warmup_fraction: 0.03}
+    - {widths: [2048, 2048], dropout: 0.3, lr: 3.0e-3, weight_decay: 0.01, warmup_fraction: 0.03}
+    - {widths: [512, 512], dropout: 0.1, lr: 3.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {widths: [2048, 2048], dropout: 0.1, lr: 3.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.03}
+    - {lr: 3.0e-4, weight_decay: 1.0e-4, warmup_fraction: 0.1, batch_size: 8192, max_epochs: 30, patience: 5,
+       standardize: false}
+    - {lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.1, batch_size: 8192, max_epochs: 30, patience: 5,
+       standardize: false}
+    - {widths: [512, 512], dropout: 0.1, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.1,
+       batch_size: 8192, max_epochs: 30, patience: 5, standardize: false}
+    - {widths: [512, 512], dropout: 0.3, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.1,
+       batch_size: 8192, max_epochs: 30, patience: 5, standardize: false}
+    - {widths: [2048, 2048], dropout: 0.1, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.1,
+       batch_size: 8192, max_epochs: 30, patience: 5, standardize: false}
+    - {widths: [2048, 2048], dropout: 0.3, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.1,
+       batch_size: 8192, max_epochs: 30, patience: 5, standardize: false}
+    - {widths: [2048, 512], dropout: 0.1, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.1,
+       batch_size: 8192, max_epochs: 30, patience: 5, standardize: false}
+    - {widths: [2048, 512], dropout: 0.3, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.1,
+       batch_size: 8192, max_epochs: 30, patience: 5, standardize: false}
+    - {widths: [4096, 1024], dropout: 0.1, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.1,
+       batch_size: 8192, max_epochs: 30, patience: 5, standardize: false}
+    - {widths: [4096, 1024], dropout: 0.3, lr: 1.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.1,
+       batch_size: 8192, max_epochs: 30, patience: 5, standardize: false}
+    - {widths: [2048, 512], dropout: 0.2, lr: 3.0e-4, weight_decay: 1.0e-4, warmup_fraction: 0.1,
+       batch_size: 8192, max_epochs: 30, patience: 5, standardize: false}
+    - {widths: [2048, 512], dropout: 0.2, lr: 3.0e-3, weight_decay: 1.0e-4, warmup_fraction: 0.1,
+       batch_size: 8192, max_epochs: 30, patience: 5, standardize: false}

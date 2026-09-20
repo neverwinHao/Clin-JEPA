@@ -1,22 +1,8 @@
-"""Canonical per-hour event ordering and value-presence helpers.
+"""Fixed within-hour ordering of clinical variables for the state and action texts."""
 
-Used by the trajectory builder (:mod:`clin_jepa.data.step06_trajectories`) to
-order within-hour clinical events by a fixed clinical priority and to drop
-empty event rows.
-
-``CANONICAL_VARIABLE_ORDER`` maps ``(source_table, variable_name)`` to an
-integer sort priority (lower = earlier). Unmapped variables get 9999.
-Ordering: SOFA -> Vitals -> Blood gas -> Labs -> Assessment -> Output ->
-Organ failure -> Vasopressors -> Ventilation -> Dialysis -> Antibiotic ->
-Neuromuscular blockade -> Invasive lines.
-"""
-
-import numpy as np
 import pandas as pd
 
-
 CANONICAL_VARIABLE_ORDER: dict[tuple[str, str], int] = {
-    # --- SOFA scores (0-99) ---
     ("sofa", "sofa_24hours"): 0,
     ("sofa", "respiration_24hours"): 1,
     ("sofa", "coagulation_24hours"): 2,
@@ -24,7 +10,6 @@ CANONICAL_VARIABLE_ORDER: dict[tuple[str, str], int] = {
     ("sofa", "cardiovascular_24hours"): 4,
     ("sofa", "cns_24hours"): 5,
     ("sofa", "renal_24hours"): 6,
-    # --- Vitals (100-199) ---
     ("vitalsign", "heart_rate"): 100,
     ("vitalsign", "sbp"): 101,
     ("vitalsign", "dbp"): 102,
@@ -45,7 +30,6 @@ CANONICAL_VARIABLE_ORDER: dict[tuple[str, str], int] = {
     ("height", "height"): 117,
     ("weight", "weight"): 118,
     ("weight", "weight_type"): 119,
-    # --- Blood gas (200-299) ---
     ("bg", "po2"): 200,
     ("bg", "pco2"): 201,
     ("bg", "ph"): 202,
@@ -66,7 +50,6 @@ CANONICAL_VARIABLE_ORDER: dict[tuple[str, str], int] = {
     ("bg", "aado2_calc"): 217,
     ("bg", "fio2_chartevents"): 218,
     ("bg", "pao2fio2ratio"): 219,
-    # --- Labs: Chemistry (300-319) ---
     ("chemistry", "creatinine"): 300,
     ("chemistry", "bun"): 301,
     ("chemistry", "albumin"): 302,
@@ -79,7 +62,6 @@ CANONICAL_VARIABLE_ORDER: dict[tuple[str, str], int] = {
     ("chemistry", "glucose"): 309,
     ("chemistry", "sodium"): 310,
     ("chemistry", "potassium"): 311,
-    # --- Labs: CBC (320-339) ---
     ("complete_blood_count", "wbc"): 320,
     ("complete_blood_count", "hemoglobin"): 321,
     ("complete_blood_count", "hematocrit"): 322,
@@ -90,14 +72,12 @@ CANONICAL_VARIABLE_ORDER: dict[tuple[str, str], int] = {
     ("complete_blood_count", "mcv"): 327,
     ("complete_blood_count", "rdw"): 328,
     ("complete_blood_count", "rdwsd"): 329,
-    # --- Labs: Coagulation (340-349) ---
     ("coagulation", "inr"): 340,
     ("coagulation", "pt"): 341,
     ("coagulation", "ptt"): 342,
     ("coagulation", "d_dimer"): 343,
     ("coagulation", "fibrinogen"): 344,
     ("coagulation", "thrombin"): 345,
-    # --- Labs: Enzymes (350-369) ---
     ("enzyme", "alt"): 350,
     ("enzyme", "ast"): 351,
     ("enzyme", "alp"): 352,
@@ -109,13 +89,10 @@ CANONICAL_VARIABLE_ORDER: dict[tuple[str, str], int] = {
     ("enzyme", "ck_mb"): 358,
     ("enzyme", "ggt"): 359,
     ("enzyme", "ld_ldh"): 360,
-    # --- Labs: Inflammation (370-374) ---
     ("inflammation", "crp"): 370,
-    # --- Labs: Cardiac markers (375-379) ---
     ("cardiac_marker", "troponin_t"): 375,
     ("cardiac_marker", "ck_mb"): 376,
     ("cardiac_marker", "ntprobnp"): 377,
-    # --- Labs: Blood differential (380-399) ---
     ("blood_differential", "wbc"): 380,
     ("blood_differential", "neutrophils_abs"): 381,
     ("blood_differential", "lymphocytes_abs"): 382,
@@ -125,13 +102,11 @@ CANONICAL_VARIABLE_ORDER: dict[tuple[str, str], int] = {
     ("blood_differential", "bands"): 386,
     ("blood_differential", "immature_granulocytes"): 387,
     ("blood_differential", "nrbc"): 388,
-    # --- Assessment: GCS (400-499) ---
     ("gcs", "gcs"): 400,
     ("gcs", "gcs_motor"): 401,
     ("gcs", "gcs_verbal"): 402,
     ("gcs", "gcs_eyes"): 403,
     ("gcs", "gcs_unable"): 404,
-    # --- Output (500-599) ---
     ("urine_output", "urineoutput"): 500,
     ("urine_output_rate", "uo"): 501,
     ("urine_output_rate", "urineoutput_6hr"): 502,
@@ -141,7 +116,6 @@ CANONICAL_VARIABLE_ORDER: dict[tuple[str, str], int] = {
     ("urine_output_rate", "uo_mlkghr_12hr"): 506,
     ("urine_output_rate", "uo_mlkghr_24hr"): 507,
     ("urine_output_rate", "weight"): 508,
-    # --- Organ failure: KDIGO (600-699) ---
     ("kdigo_stages", "creat"): 600,
     ("kdigo_stages", "creat_low_past_7day"): 601,
     ("kdigo_stages", "creat_low_past_48hr"): 602,
@@ -153,7 +127,6 @@ CANONICAL_VARIABLE_ORDER: dict[tuple[str, str], int] = {
     ("kdigo_stages", "aki_stage_crrt"): 608,
     ("kdigo_stages", "aki_stage"): 609,
     ("kdigo_stages", "aki_stage_smoothed"): 610,
-    # --- Vasopressors (700-749) ---
     ("vasoactive_agent", "norepinephrine"): 700,
     ("vasoactive_agent", "epinephrine"): 701,
     ("vasoactive_agent", "dopamine"): 702,
@@ -162,7 +135,6 @@ CANONICAL_VARIABLE_ORDER: dict[tuple[str, str], int] = {
     ("vasoactive_agent", "vasopressin"): 705,
     ("vasoactive_agent", "milrinone"): 706,
     ("norepinephrine_equivalent_dose", "norepinephrine_equivalent_dose"): 710,
-    # --- Ventilation (750-799) ---
     ("ventilation", "ventilation_status"): 750,
     ("ventilator_setting", "ventilator_mode"): 751,
     ("ventilator_setting", "ventilator_mode_hamilton"): 752,
@@ -178,7 +150,6 @@ CANONICAL_VARIABLE_ORDER: dict[tuple[str, str], int] = {
     ("ventilator_setting", "respiratory_rate_spontaneous"): 762,
     ("ventilator_setting", "minute_volume"): 763,
     ("ventilator_setting", "flow_rate"): 764,
-    # --- Dialysis (800-849) ---
     ("rrt", "dialysis_present"): 800,
     ("rrt", "dialysis_active"): 801,
     ("rrt", "dialysis_type"): 802,
@@ -204,13 +175,10 @@ CANONICAL_VARIABLE_ORDER: dict[tuple[str, str], int] = {
     ("crrt", "clots"): 829,
     ("crrt", "clots_increasing"): 830,
     ("crrt", "clotted"): 831,
-    # --- Antibiotic (850-899) ---
     ("antibiotic", "antibiotic"): 850,
     ("antibiotic", "route"): 851,
-    # --- Neuromuscular blockade (900-949) ---
     ("neuroblock", "drug_rate"): 900,
     ("neuroblock", "drug_amount"): 901,
-    # --- Invasive lines (950-999) ---
     ("invasive_line", "line_type"): 950,
     ("invasive_line", "line_site"): 951,
 }
@@ -221,33 +189,14 @@ def _sort_key(source_table: str, variable_name: str) -> int:
     return CANONICAL_VARIABLE_ORDER.get((source_table, variable_name), 9999)
 
 
-def _sort_events(deduped: pd.DataFrame) -> pd.DataFrame:
-    """Sort deduplicated events by canonical variable order.
-
-    Args:
-        deduped: Deduplicated events DataFrame with source_table, variable_name.
-
-    Returns:
-        DataFrame sorted by canonical priority.
-    """
-    if len(deduped) == 0:
-        return deduped
-    priorities = deduped.apply(
+def sort_events(events: pd.DataFrame) -> pd.DataFrame:
+    """Events in the fixed variable order; ties keep their input order."""
+    if len(events) == 0:
+        return events
+    priorities = events.apply(
         lambda row: _sort_key(row["source_table"], row["variable_name"]),
         axis=1,
     )
-    return deduped.assign(_priority=priorities).sort_values(
+    return events.assign(_priority=priorities).sort_values(
         "_priority", kind="stable",
     ).drop(columns=["_priority"])
-
-
-def _has_value(numeric_value, text_value) -> bool:
-    """Check if an event row has a meaningful value (numeric or text)."""
-    has_numeric = numeric_value is not None and not (
-        isinstance(numeric_value, float) and np.isnan(numeric_value)
-    )
-    has_text = (
-        text_value is not None
-        and str(text_value) not in ("", "nan", "None")
-    )
-    return has_numeric or has_text

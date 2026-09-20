@@ -1,0 +1,58 @@
+# MIMIC-IV v3.1 inputs (raw tables and mimic-code concepts) and pipeline outputs.
+
+icu:
+  inputevents:      ${MIMIC_RAW}/icu/inputevents.csv.gz
+  procedureevents:  ${MIMIC_RAW}/icu/procedureevents.csv.gz
+  d_items:          ${MIMIC_RAW}/icu/d_items.csv.gz
+
+hosp:
+  prescriptions:    ${MIMIC_RAW}/hosp/prescriptions.csv.gz
+  emar:             ${MIMIC_RAW}/hosp/emar.csv.gz
+  diagnoses_icd:    ${MIMIC_RAW}/hosp/diagnoses_icd.csv.gz
+  d_icd_diagnoses:  ${MIMIC_RAW}/hosp/d_icd_diagnoses.csv.gz
+
+concepts:
+  demographics:
+    icustay_detail:    ${MIMIC_RAW}/concepts/demographics/icustay_detail.csv
+    weight_durations:  ${MIMIC_RAW}/concepts/demographics/weight_durations.csv
+  measurement:
+    vitalsign:             ${MIMIC_RAW}/concepts/measurement/vitalsign.csv
+    bg:                    ${MIMIC_RAW}/concepts/measurement/bg.csv
+    chemistry:             ${MIMIC_RAW}/concepts/measurement/chemistry.csv
+    complete_blood_count:  ${MIMIC_RAW}/concepts/measurement/complete_blood_count.csv
+    coagulation:           ${MIMIC_RAW}/concepts/measurement/coagulation.csv
+    enzyme:                ${MIMIC_RAW}/concepts/measurement/enzyme.csv
+    inflammation:          ${MIMIC_RAW}/concepts/measurement/inflammation.csv
+    cardiac_marker:        ${MIMIC_RAW}/concepts/measurement/cardiac_marker.csv
+    gcs:                   ${MIMIC_RAW}/concepts/measurement/gcs.csv
+    urine_output:          ${MIMIC_RAW}/concepts/measurement/urine_output.csv
+    urine_output_rate:     ${MIMIC_RAW}/concepts/measurement/urine_output_rate.csv
+    ventilator_setting:    ${MIMIC_RAW}/concepts/measurement/ventilator_setting.csv
+    blood_differential:    ${MIMIC_RAW}/concepts/measurement/blood_differential.csv
+    height:                ${MIMIC_RAW}/concepts/measurement/height.csv
+    oxygen_delivery:       ${MIMIC_RAW}/concepts/measurement/oxygen_delivery.csv
+    rhythm:                ${MIMIC_RAW}/concepts/measurement/rhythm.csv
+  score:
+    sofa:  ${MIMIC_RAW}/concepts/score/sofa.csv
+  sepsis:
+    sepsis3:  ${MIMIC_RAW}/concepts/sepsis/sepsis3.csv
+  medication:
+    vasoactive_agent:                ${MIMIC_RAW}/concepts/medication/vasoactive_agent.csv
+    norepinephrine_equivalent_dose:  ${MIMIC_RAW}/concepts/medication/norepinephrine_equivalent_dose.csv
+    antibiotic:                      ${MIMIC_RAW}/concepts/medication/antibiotic.csv
+    neuroblock:                      ${MIMIC_RAW}/concepts/medication/neuroblock.csv
+  treatment:
+    ventilation:    ${MIMIC_RAW}/concepts/treatment/ventilation.csv
+    rrt:            ${MIMIC_RAW}/concepts/treatment/rrt.csv
+    crrt:           ${MIMIC_RAW}/concepts/treatment/crrt.csv
+    invasive_line:  ${MIMIC_RAW}/concepts/treatment/invasive_line.csv
+  organfailure:
+    kdigo_stages:  ${MIMIC_RAW}/concepts/organfailure/kdigo_stages.csv
+
+output:
+  cohort:        ${CLIN_JEPA_DATA}/cohort
+  observations:  ${CLIN_JEPA_DATA}/observations
+  actions:       ${CLIN_JEPA_DATA}/actions
+  discretized:   ${CLIN_JEPA_DATA}/discretized
+  splits:        ${CLIN_JEPA_DATA}/splits
+  trajectories:  ${CLIN_JEPA_DATA}/trajectories

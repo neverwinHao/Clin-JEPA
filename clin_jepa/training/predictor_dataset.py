@@ -1,15 +1,9 @@
-"""Predictor dataset over pre-computed encoder embeddings.
-
-Loads embedding shards produced by the precompute step and yields trajectory
-windows ready for :class:`~clin_jepa.model.predictor.ACTransformerPredictor`
-training on a frozen encoder.
-"""
+"""Trajectory windows as cached embeddings, for training a predictor on a frozen encoder."""
 
 from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import Optional
 
 import torch
 from torch.utils.data import Dataset
@@ -18,27 +12,13 @@ logger = logging.getLogger(__name__)
 
 
 class PredictorDataset(Dataset):
-    """Loads pre-computed embeddings for AC-predictor training.
-
-    Each shard is a ``.pt`` file containing ``z_state_embeddings``,
-    ``z_action_embeddings``, ``z_statics``, and per-window index arrays.
-    The dataset flattens windows across shards into a single list and
-    gathers per-window embeddings via index lookup.
-
-    Args:
-        embedding_dir: Directory containing ``train/``, ``val/``, ``test/``
-            subdirs of embedding shards (typically the output of the
-            ``precompute_embeddings`` script).
-        split: One of ``"train"``, ``"val"``, ``"test"``.
-        max_windows: If set, stop loading after this many windows
-            (useful for smoke tests).
-    """
+    """Trajectory windows of one split of an embedding cache."""
 
     def __init__(
         self,
         embedding_dir: str | Path,
         split: str = "train",
-        max_windows: Optional[int] = None,
+        max_windows: int | None = None,
     ) -> None:
         embedding_dir = Path(embedding_dir) / split
         shard_files = sorted(embedding_dir.glob("*.pt"))
@@ -82,23 +62,15 @@ class PredictorDataset(Dataset):
         z_static = shard["z_statics"][w["static_idx"]]
 
         return {
-            "z_states":  z_states,    # (L, 4096) float16
-            "z_actions": z_actions,   # (L, 4096) float16
-            "z_static":  z_static,    # (4096,) float16
+            "z_states":  z_states,
+            "z_actions": z_actions,
+            "z_static":  z_static,
             "length":    int(w["length"]),
         }
 
 
 def predictor_collate_fn(batch: list[dict]) -> dict:
-    """Collate variable-length trajectories: pad to batch max + valid mask.
-
-    Returns:
-        z_states:     ``(B, T_max, 4096)`` padded.
-        z_actions:    ``(B, T_max, 4096)`` padded.
-        z_static:     ``(B, 4096)``.
-        lengths:      ``(B,)`` int64.
-        padding_mask: ``(B, T_max)`` bool, ``True`` marks valid positions.
-    """
+    """Collate variable-length trajectories: pad to batch max + valid mask."""
     B = len(batch)
     T_max = max(item["length"] for item in batch)
     state_dim = batch[0]["z_states"].shape[1]

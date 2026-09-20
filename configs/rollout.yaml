@@ -1,0 +1,52 @@
+context: 24
+steps: 48
+horizons: [8, 24, 48]
+batch_size: 256
+
+embedding_dir: ${CLIN_JEPA_DATA}/embeddings
+output_dir: ${CLIN_JEPA_OUTPUT}/rollout
+
+predictor:
+  state_dim: 4096
+  action_dim: 4096
+  static_dim: 4096
+  hidden_dim: 1024
+  num_layers: 6
+  num_heads: 8
+  ffn_dim: 4096
+  max_timesteps: 72
+
+models:
+  clin_jepa:
+    embeddings: clin_jepa
+    predictor: ${CLIN_JEPA_OUTPUT}/clin_jepa/checkpoints/final/predictor.pt
+  vjepa2ac:
+    embeddings: vjepa2ac
+    predictor: ${CLIN_JEPA_OUTPUT}/predictor_vjepa2ac/best.pt
+  sft_baseline:
+    embeddings: sft_baseline
+    predictor: ${CLIN_JEPA_OUTPUT}/predictor_sft_baseline/best.pt
+  separate_seed_42:
+    embeddings: clin_jepa
+    predictor: ${CLIN_JEPA_OUTPUT}/predictor_separate/seed_42/best.pt
+  separate_seed_1337:
+    embeddings: clin_jepa
+    predictor: ${CLIN_JEPA_OUTPUT}/predictor_separate/seed_1337/best.pt
+  separate_seed_2026:
+    embeddings: clin_jepa
+    predictor: ${CLIN_JEPA_OUTPUT}/predictor_separate/seed_2026/best.pt
+  no_warmup:
+    embeddings: no_warmup
+    predictor: ${CLIN_JEPA_OUTPUT}/no_warmup/checkpoints/after_sync/predictor.pt
+  no_alignment:
+    embeddings: no_alignment
+    predictor: ${CLIN_JEPA_OUTPUT}/no_alignment/checkpoints/after_co_training/predictor.pt
+  clin_jepa_after_warmup:
+    embeddings: sft_baseline
+    predictor: ${CLIN_JEPA_OUTPUT}/clin_jepa/checkpoints/after_warmup/predictor.pt
+  clin_jepa_after_co_training:
+    embeddings: clin_jepa
+    predictor: ${CLIN_JEPA_OUTPUT}/clin_jepa/checkpoints/after_co_training/predictor.pt
+  clin_jepa_after_alignment:
+    embeddings: clin_jepa
+    predictor: ${CLIN_JEPA_OUTPUT}/clin_jepa/checkpoints/after_alignment/predictor.pt

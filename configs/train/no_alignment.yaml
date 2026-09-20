@@ -1,0 +1,57 @@
+# Clin-JEPA w/o alignment.
+
+model:
+  base_model: Qwen/Qwen3-8B
+  checkpoint_dir: ${CLIN_JEPA_OUTPUT}/encoder_sft/final
+  attn_implementation: flash_attention_2
+  gradient_checkpointing: true
+
+predictor:
+  state_dim: 4096
+  action_dim: 4096
+  static_dim: 4096
+  hidden_dim: 1024
+  num_layers: 6
+  num_heads: 8
+  ffn_dim: 4096
+  max_timesteps: 72
+  ffn_dropout: 0.15
+  attn_dropout: 0.1
+
+data:
+  trajectory_dir: ${CLIN_JEPA_DATA}/trajectories
+  max_seq_len: 4096
+
+training:
+  phases:
+    warmup: 1024
+    co_training: 1536
+    alignment: 0
+    finalization: 2048
+  sync: false
+  max_steps: 2800
+  collapse_guard: null
+
+  effective_batch_size: 64
+  per_gpu_batch_size: 8
+  lr_encoder: 5.0e-5
+  lr_predictor: 5.0e-4
+  weight_decay: 0.04
+  warmup_ratio: 0.02
+  gradient_clip_encoder: 0.5
+  gradient_clip_predictor: 1.0
+  rollout_horizon: 2
+  ema_tau: 0.996
+  seed: 42
+
+logging:
+  log_every: 25
+  eval_every: 200
+  eval_max_windows: 200
+  val_windows: 1000
+
+save:
+  dir: ${CLIN_JEPA_OUTPUT}/no_alignment
+
+hf:
+  offline: true

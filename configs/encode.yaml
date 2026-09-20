@@ -1,0 +1,19 @@
+model:
+  base_model: Qwen/Qwen3-8B
+  attn_implementation: flash_attention_2
+  gradient_checkpointing: false
+
+data:
+  trajectory_dir: ${CLIN_JEPA_DATA}/trajectories
+  embedding_dir: ${CLIN_JEPA_DATA}/embeddings
+  max_seq_len: 4096
+
+encoders:
+  clin_jepa: ${CLIN_JEPA_OUTPUT}/clin_jepa/checkpoints/final/online
+  vjepa2ac: ${CLIN_JEPA_OUTPUT}/vjepa2ac/checkpoints/best/online
+  sft_baseline: ${CLIN_JEPA_OUTPUT}/encoder_sft/final
+  no_warmup: ${CLIN_JEPA_OUTPUT}/no_warmup/checkpoints/after_sync/online
+  no_alignment: ${CLIN_JEPA_OUTPUT}/no_alignment/checkpoints/after_co_training/online
+
+hf:
+  offline: true

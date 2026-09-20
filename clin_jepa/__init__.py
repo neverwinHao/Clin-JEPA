@@ -1,9 +1,7 @@
-"""Clin-JEPA: Joint-Embedding Predictive Pretraining on EHR Patient Trajectories.
+"""Clin-JEPA: a latent world model for intensive-care patient trajectories.
 
-A multi-phase co-training framework that pretrains a Qwen3-8B-based encoder
-together with a 92M action-conditioned Transformer predictor on intensive-care
-patient trajectories, then uses the retained predictor at inference for
-autoregressive latent-space rollout.
+An LLM encoder reads each hour of the record as text; an action-conditioned Transformer predictor, trained together
+with it under a multi-phase curriculum, rolls the patient state forward in the encoder's latent space.
 """
 
 __version__ = "0.1.0"

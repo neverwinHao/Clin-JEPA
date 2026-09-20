@@ -1,78 +1,58 @@
 # Architecture
 
-Clin-JEPA has two deployed model components plus one training-only target
-network. See paper §3 (model) and §4 (training) for the full design
-rationale; this document is a fast reference for readers of the code.
+Two components are deployed, the encoder and the predictor; a target encoder and a masked-prediction head exist only during training.
 
-## Components
+## Encoder
 
-### Encoder
+Qwen3-8B with frozen base weights and LoRA adapters (r = 16, alpha = 32, on `q_proj`, `k_proj`, `v_proj`, `o_proj`; about 15.3M trainable parameters). Each text, an hour of observations, an hour of interventions or the demographics of a stay, is mapped to a 4096-d embedding by the hidden state of its last token. Adapter handling, batched encoding and the target encoder are in `clin_jepa/training/encoder_ops.py`.
 
-A Qwen3-8B language model with lightweight LoRA adapters (r=16, alpha=32,
-on `q_proj`, `k_proj`, `v_proj`, `o_proj` — ~30.7M trainable parameters
-out of 8.2B). The base weights are frozen throughout. Each input text
-(per-hour state, per-hour action, or per-stay demographics) is mapped to
-a 4096-dim embedding by taking the last-token hidden state.
+## Predictor
 
-The encoder lives in :mod:`clin_jepa.training.encoder_ops` (the LoRA setup
-and forward-pass utilities are bundled with the training infrastructure
-because the encoder is constructed and used exclusively inside training
-and embedding-precompute scripts).
+`clin_jepa.model.predictor.ACTransformerPredictor`: a 6-layer pre-norm Transformer encoder (92.5M parameters; hidden size 1024, 8 heads, FFN 4096) that works in the encoder's latent space. States, actions and demographics enter through three linear maps from 4096 to 1024 dimensions. The input is the interleaved sequence `[d, z_1, u_1, ..., z_T, u_T]` of length `2T + 1` under block-causal attention; every state position predicts the next state. At inference the predictor is kept and rolled out autoregressively, each predicted state becoming the next state input (`clin_jepa/rollout.py`).
 
-### AC Transformer predictor
+## Target encoder (training only)
 
-A 6-layer pre-norm Transformer encoder (~92M params; 1024 hidden,
-8 heads, FFN 4096, dropout 0.15/0.10) that operates entirely in the
-encoder's 4096-dim latent space. It consumes the interleaved sequence
-`[d, s_1, u_1, s_2, u_2, ..., s_T, u_T]` of length `2T+1`, applies
-block-causal attention, and outputs the next-state prediction
-$\hat z_{t+1}$ from each state position.
+A second set of adapters held in fp32, updated as an exponential moving average of the online adapters (momentum 0.996 in the curriculum, raised linearly from 0.996 to 1 over the V-JEPA 2-AC style refinement). It supplies the stop-gradient targets of the L1 prediction loss and is discarded after training.
 
-At inference, the predictor is retained and rolls out autoregressively:
-each predicted $\hat z_{t+h}$ is fed back as the state input for step
-`t+h+1`. See :class:`clin_jepa.model.predictor.ACTransformerPredictor`.
+## Masked-prediction head (V-JEPA 2-AC style baseline only)
 
-### EMA target encoder (training-only)
+`clin_jepa.model.jepa_predictor.JEPAPredictor`: a 3-layer cross-attention Transformer decoder (16.9M parameters) that predicts the target embeddings of randomly masked hours from the visible ones during the baseline's encoder refinement; discarded afterwards.
 
-A parameter copy of the encoder LoRA held in fp32 in a second PEFT
-adapter. Updated as an exponential moving average of the online encoder
-with `tau=0.996`. Serves only as a stop-gradient anchor for the JEPA L1
-loss; carries no projection head; is discarded at inference.
+## Curriculum
 
-See :func:`clin_jepa.training.encoder_ops.create_target_encoder_fp32`.
+`clin_jepa/training/curriculum.py` trains the encoder adapters and the predictor in one run. The loss is the L1 error of the next-state prediction plus the L1 error of a two-step rollout. Phase lengths are those of `configs/train/clin_jepa.yaml`.
 
-## Training-only auxiliary networks
+| phase | steps | encoder adapters | predictor | prediction targets |
+|---|---|---|---|---|
+| warmup | 3,072 | frozen | trained | online encoder |
+| co-training | 3,072 | trained | trained | target encoder, updated every step |
+| alignment | 1,024 | frozen | trained | target encoder, updated every step |
+| hard sync | | target adapters set to the online adapters | | |
+| finalization | 4,608 | frozen | trained | online encoder |
 
-### Disposable JEPA predictor (V-JEPA 2-AC baseline only)
+The encoder adapters do not change after co-training, so the checkpoints `after_co_training`, `after_alignment` and `final` share one encoder and differ in the predictor.
 
-A ~16.9M-parameter bidirectional cross-attention decoder used only during
-the encoder-refinement stage of the V-JEPA 2-AC baseline. Predicts
-encoder embeddings at random-masked positions, then is discarded.
+## The six models
 
-See :class:`clin_jepa.model.jepa_predictor.JEPAPredictor`.
+| model | encoder (02) | embedding cache (03) | predictor | rollout (05) | evaluated in |
+|---|---|---|---|---|---|
+| Clin-JEPA | curriculum, `clin_jepa.yaml`, checkpoint `final` | `clin_jepa` | same run and checkpoint (02) | `clin_jepa` | 06, 07, 08 |
+| V-JEPA 2-AC style | masked-prediction refinement, checkpoint `best` | `vjepa2ac` | trained on the cache (04) | `vjepa2ac` | 06, 07, 08 |
+| SFT baseline w/o JEPA | `encoder_sft/final` | `sft_baseline` | trained on the cache (04) | `sft_baseline` | 06, 07, 08 |
+| Clin-JEPA w/o warmup | curriculum, `no_warmup.yaml`, checkpoint `after_sync` | `no_warmup`, test split | same run and checkpoint (02) | `no_warmup` | 06 |
+| Clin-JEPA w/o alignment | curriculum, `no_alignment.yaml`, checkpoint `after_co_training` | `no_alignment`, test split | same run and checkpoint (02) | `no_alignment` | 06 |
+| Clin-JEPA w/ separately trained predictor | Clin-JEPA's | `clin_jepa` | three trainings on the cache (04) | `separate_seed_{42,1337,2026}` | 06 |
 
-## Data flow at a glance
+All models start from `encoder_sft/final`. For stage 06, stage 05 also rolls out Clin-JEPA's predictor as saved after warmup, co-training and alignment, on the `sft_baseline`, `clin_jepa` and `clin_jepa` caches.
+
+## Flow
 
 ```
-                       Trajectory shards
-                                |
-                                v
-                         Encoder SFT  -- (Qwen3-8B + LoRA)
-                                |
-                                v
-                  Clin-JEPA pretraining (five phases)
-                                |
-                                v
-              Encoder LoRA  +  AC Transformer predictor
-                          \   /
-                           v v
-                       Autoregressive
-                          rollout
-                                |
-                                v
-                  Downstream MLP probes
+trajectory shards (01)
+  -> encoder SFT (02)
+       -> curriculum: encoder adapters and predictor in one run (02)
+       -> V-JEPA 2-AC style refinement of the encoder (02)
+  -> embedding caches (03) -> predictors on frozen encoders (04)
+  -> rollout (05) -> stability (06), downstream (08)
+     embedding caches (03) -> geometry (07)
 ```
-
-For the V-JEPA 2-AC and SFT baselines the encoder is frozen after the
-JEPA refinement / SFT stage respectively, and the AC predictor is trained
-on cached embeddings. The probe stage is identical across paradigms.

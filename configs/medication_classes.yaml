@@ -1,0 +1,77 @@
+fallback: other
+
+classes:
+  - vasopressor
+  - sedative
+  - opioid
+  - antibiotic
+  - anticoagulant
+  - insulin
+  - diuretic
+  - steroid
+  - antiarrhythmic
+  - beta_blocker
+  - vasodilator_antihypertensive
+  - antipsychotic_antiemetic
+  - bronchodilator
+  - gi_prophylaxis
+  - electrolyte
+  - crystalloid
+  - colloid_albumin
+  - blood_product
+  - nutrition
+  - analgesic_nonopioid
+  - laxative_bowel
+  - thrombolytic_antiplatelet
+  - neuromuscular_blocker
+  - statin
+  - vitamin_supplement
+  - thyroid
+  - antiepileptic
+  - psychotropic_sleep
+  - anticholinergic_reversal
+  - vaccine
+  - other
+
+rules:
+  - {class: thrombolytic_antiplatelet, pattern: 'alteplase|tenecteplase|\btpa\b|cathflo'}
+  - {class: laxative_bowel, pattern: 'enema'}
+  - {class: other, pattern: 'flush'}
+  - {class: other, pattern: '^soln$|^solution$'}
+  - {class: other, pattern: 'phytonadione|vitamin k\b'}
+  - {class: other, pattern: 'dextrose 50|d50w?\b|glucose gel|glucagon'}
+  - {class: analgesic_nonopioid, pattern: 'lidocaine.*(patch|jelly|topical|viscous|gel)'}
+  - {class: other, pattern: 'lidocaine.*(epinephrine|bupivacaine)|bupivacaine|ropivacaine|chloroprocaine'}
+  - {class: other, pattern: 'chlorhexidine|mupirocin|nystatin|bacitracin|silver sulfadiazine|clotrimazole|artificial tear|ointment|oral rinse|mouth care'}
+  - {class: other, pattern: 'pre-admission|non-icu intake'}
+  - {class: vasopressor, pattern: 'norepinephrine|noradrenaline|levophed|epinephrine|adrenaline|dopamine|phenylephrine|neo-?synephrine|vasopressin|dobutamine|milrinone|midodrine|angiotensin|isoproterenol'}
+  - {class: neuromuscular_blocker, pattern: 'cisatracurium|nimbex|rocuronium|vecuronium|atracurium|succinylcholine|pancuronium'}
+  - {class: sedative, pattern: 'propofol|diprivan|midazolam|versed|lorazepam|ativan|dexmedetomidine|precedex|ketamine|etomidate|diazepam|phenobarbital|pentobarbital|clonazepam|alprazolam'}
+  - {class: opioid, pattern: 'fentanyl|hydromorphone|dilaudid|morphine|oxycodone|oxycontin|methadone|remifentanil|sufentanil|meperidine|tramadol|hydrocodone|codeine|buprenorphine|oxycod'}
+  - {class: antibiotic, pattern: 'vancomycin|cefepime|piperacillin|tazobactam|zosyn|meropenem|ertapenem|imipenem|ceftriaxone|cefazolin|ceftazidime|cefoxitin|cefpodoxime|cefuroxime|cephalexin|ceftaroline|cefiderocol|metronidazole|flagyl|levofloxacin|ciprofloxacin|moxifloxacin|azithromycin|erythromycin|clarithromycin|linezolid|daptomycin|ampicillin|unasyn|amoxicillin|augmentin|nafcillin|oxacillin|penicillin|gentamicin|tobramycin|amikacin|micafungin|caspofungin|anidulafungin|fluconazole|voriconazole|posaconazole|isavuconazon|amphotericin|acyclovir|ganciclovir|valganciclovir|oseltamivir|remdesivir|sulfameth|trimethoprim|bactrim|doxycycline|minocycline|tigecycline|clindamycin|aztreonam|rifampin|rifaximin|nitrofurantoin|colistin|polymyxin|atovaquone|ivermectin|fidaxomicin'}
+  - {class: anticoagulant, pattern: 'heparin|enoxaparin|lovenox|warfarin|coumadin|apixaban|eliquis|rivaroxaban|xarelto|dabigatran|argatroban|bivalirudin|fondaparinux|dalteparin'}
+  - {class: insulin, pattern: 'insulin|humalog|glargine|lantus|novolog|lispro|aspart|\bnph\b|detemir|levemir'}
+  - {class: diuretic, pattern: 'furosemide|lasix|bumetanide|bumex|chlorothiazide|diuril|spironolactone|acetazolamide|diamox|torsemide|hydrochlorothiazide|metolazone|mannitol|eplerenone'}
+  - {class: steroid, pattern: 'hydrocortisone|methylprednisolone|solu-?medrol|dexamethasone|decadron|prednisone|prednisolone|fludrocortisone|budesonide|betamethasone|triamcinolone'}
+  - {class: antiarrhythmic, pattern: 'amiodarone|diltiazem|cardizem|esmolol|digoxin|adenosine|^lidocaine$|lidocaine.*(infusion|drip|bolus)|procainamide|verapamil|sotalol|ibutilide|flecainide|dofetilide'}
+  - {class: beta_blocker, pattern: 'metoprolol|lopressor|labetalol|propranolol|carvedilol|atenolol|bisoprolol|nadolol|nebivolol'}
+  - {class: vasodilator_antihypertensive, pattern: 'nitroglycerin|nitroprusside|nipride|hydralazine|nicardipine|clevidipine|amlodipine|nifedipine|nimodipine|lisinopril|enalapril|captopril|losartan|valsartan|irbesartan|olmesartan|isosorbide|clonidine|minoxidil|sildenafil|epoprostenol|flolan|treprostinil|remodulin|doxazosin|terazosin|prazosin'}
+  - {class: antipsychotic_antiemetic, pattern: 'haloperidol|haldol|quetiapine|seroquel|olanzapine|zyprexa|ondansetron|zofran|metoclopramide|reglan|prochlorperazine|compazine|promethazine|phenergan|risperidone|droperidol|aripiprazole|ziprasidone|scopolamine|meclizine'}
+  - {class: bronchodilator, pattern: 'albuterol|ipratropium|levalbuterol|xopenex|duoneb|tiotropium|aminophylline|theophylline|salmeterol|formoterol'}
+  - {class: statin, pattern: 'statin|atorvastatin|simvastatin|pravastatin|rosuvastatin|lovastatin|pitavastatin|ezetimibe'}
+  - {class: thyroid, pattern: 'levothyroxine|synthroid|liothyronine|methimazole|propylthiouracil'}
+  - {class: antiepileptic, pattern: 'levetiracetam|keppra|phenytoin|dilantin|fosphenytoin|valpro|depakote|lacosamide|vimpat|carbamazepine|lamotrigine|topiramate|oxcarbazepine|zonisamide'}
+  - {class: psychotropic_sleep, pattern: 'trazodone|sertraline|citalopram|escitalopram|fluoxetine|paroxetine|venlafaxine|duloxetine|mirtazapine|bupropion|ramelteon|melatonin|zolpidem|buspirone|lithium|amitriptyline|nortriptyline|donepezil|memantine|diphenhydramine|hydroxyzine'}
+  - {class: anticholinergic_reversal, pattern: 'glycopyrr?olate|robinul|neostigmine|prostigmin|sugammadex|pyridostigmine|physostigmine|atropine'}
+  - {class: vaccine, pattern: 'vaccin|influenza virus|pneumococcal|tdap|toxoid'}
+  - {class: vitamin_supplement, pattern: 'thiamine|folic acid|folate|multivitamin|vitamin (a|b|c|d|e)\b|cyanocobalamin|ascorbic|calcitriol|ergocalciferol|cholecalciferol|ferrous|iron sucrose|zinc|nicotine patch'}
+  - {class: gi_prophylaxis, pattern: 'pantoprazole|protonix|famotidine|pepcid|omeprazole|prilosec|lansoprazole|esomeprazole|ranitidine|sucralfate'}
+  - {class: crystalloid, pattern: '(potassium chloride|\bkcl\b).*(d5|dextrose|nacl|sodium chloride|\bns\b|\blr\b|ringer)'}
+  - {class: electrolyte, pattern: 'potassium chloride|\bkcl\b|k ?phos|na ?phos|potassium phos|sodium phos|magnesium sulfate|magnesium oxide|magnesium chloride|calcium gluconate|calcium chloride|calcium carbonate|sodium bicarbonate|phosphate|neutra-?phos|phosphorus|potassium acetate|sodium acetate|potassium bicarbonate|zinc sulfate'}
+  - {class: thrombolytic_antiplatelet, pattern: 'aspirin|clopidogrel|plavix|alteplase|tenecteplase|\btpa\b|ticagrelor|prasugrel|eptifibatide|integrilin|tirofiban|cangrelor'}
+  - {class: analgesic_nonopioid, pattern: 'acetaminophen|tylenol|ketorolac|toradol|ibuprofen|naproxen|celecoxib|gabapentin|pregabalin'}
+  - {class: laxative_bowel, pattern: 'senna|docusate|bisacodyl|polyethylene glycol|miralax|lactulose|magnesium citrate|milk of magnesia|methylnaltrexone|glycerin|fleet|sodium phosphates enema'}
+  - {class: blood_product, pattern: 'rbc intake|platelet intake|ffp intake|plasma intake|packed red blood cells|\bprbc|red blood cell|fresh frozen plasma|\bffp\b|platelets|cryoprecipitate|cell saver|whole blood|kcentra|prothrombin complex'}
+  - {class: colloid_albumin, pattern: 'colloid intake|albumin|hetastarch|hespan|voluven|dextran'}
+  - {class: nutrition, pattern: '\btpn\b|parenteral|tube feed|tubefeed|nutren|glucerna|jevity|osmolite|promote|replete|nepro|vital \(|vital high|isosource|peptamen|impact|pulmocare|two ?cal|boost|ensure|pro-?source|beneprotein|po intake|gastric meds|gt flush|enteral|fiber|lipid|intralipid|smof|clinimix|amino acid|trophamine|dextrose 70|d70'}
+  - {class: crystalloid, pattern: 'nacl|sodium chloride|\bns\b|normal saline|saline|lactated ringer|\blr\b|d5|dextrose 5|5% dextrose|dextrose 10|d10|dextrose 20|plasma-?lyte|sterile water|free water|hypertonic|crystalloid|half normal|\bsw\b|water for injection'}

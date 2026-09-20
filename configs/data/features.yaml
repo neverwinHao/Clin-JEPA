@@ -1,23 +1,9 @@
-# =============================================================================
-# Feature Definitions and Event Domain Mapping
-# =============================================================================
-# Maps MIMIC-IV source tables to observation/action domains, defines which
-# columns to extract, and specifies text template formats.
-# See the paper, §3 (Data) and Appendix B, for full template details.
-# =============================================================================
-
-# --- Temporal discretization ---
+# Source tables, columns and categories of the extracted observations and interventions.
 
 temporal:
-  step_size_hours: 1               # Hourly bins
-  max_steps: 336                   # 14 days max
-  min_obs_per_stay: 1              # Minimum observations to keep a stay
-
-# --- Observation events (patient state) ---
-# Each entry maps to a concepts table or raw table.
-# timestamp_col: column used for event timing
-# value_cols: columns containing numeric measurements
-# category: high-level category label
+  step_size_hours: 1
+  max_steps: 336
+  min_obs_per_stay: 1
 
 observations:
   vitalsign:
@@ -122,7 +108,7 @@ observations:
     timestamp_col: charttime
     join_col: subject_id
     category: labs
-    value_cols: all  # Use all numeric columns
+    value_cols: all
 
   inflammation:
     source: concepts.measurement.inflammation
@@ -143,7 +129,7 @@ observations:
     timestamp_col: charttime
     join_col: stay_id
     category: assessment
-    value_cols: all  # GCS motor, verbal, eyes, total
+    value_cols: all
 
   urine_output:
     source: concepts.measurement.urine_output
@@ -253,7 +239,10 @@ observations:
       - ectopy_type
       - ectopy_frequency
 
-# --- Action events (clinical interventions) ---
+diagnoses:
+  source: hosp.diagnoses_icd
+  titles: hosp.d_icd_diagnoses
+  category: diagnosis
 
 actions:
   vasoactive_agent:
@@ -270,7 +259,7 @@ actions:
       - vasopressin
       - dobutamine
       - milrinone
-    is_continuous: true  # Has start/end times, active rate matters
+    is_continuous: true
 
   norepinephrine_equivalent_dose:
     source: concepts.medication.norepinephrine_equivalent_dose
@@ -352,7 +341,7 @@ actions:
     end_col: endtime
     join_col: stay_id
     category: fluid_med_input
-    is_raw_table: true  # Compressed .csv.gz, read in chunks
+    is_raw_table: true
     is_continuous: true
 
   procedureevents:
@@ -379,75 +368,3 @@ actions:
     join_col: hadm_id
     category: medication_admin
     is_raw_table: true
-
-# --- Static context (admission-level, not temporal) ---
-
-static:
-  demographics:
-    source: concepts.demographics.icustay_detail
-    cols:
-      - subject_id
-      - hadm_id
-      - stay_id
-      - gender
-      - admission_age
-      - race
-      - hospital_expire_flag
-      - los_icu
-      - first_icu_stay
-
-  comorbidity:
-    source: concepts.comorbidity.charlson
-    join_col: hadm_id
-    cols:
-      - charlson_comorbidity_index
-      - myocardial_infarct
-      - congestive_heart_failure
-      - peripheral_vascular_disease
-      - cerebrovascular_disease
-      - dementia
-      - chronic_pulmonary_disease
-      - rheumatic_disease
-      - peptic_ulcer_disease
-      - mild_liver_disease
-      - diabetes_without_cc
-      - diabetes_with_cc
-      - paraplegia
-      - renal_disease
-      - malignant_cancer
-      - severe_liver_disease
-      - metastatic_solid_tumor
-      - aids
-
-  diagnoses:
-    source: hosp.diagnoses_icd
-    descriptions: hosp.d_icd_diagnoses
-    join_col: hadm_id
-    category: diagnosis
-    # Processed by process_diagnoses() in Step 02 — specialized admission-level handler
-
-# --- Labels (for evaluation, extracted separately) ---
-
-labels:
-  sofa:
-    source: concepts.score.sofa
-    cols:
-      - sofa_24hours
-      - respiration_24hours
-      - coagulation_24hours
-      - liver_24hours
-      - cardiovascular_24hours
-      - cns_24hours
-      - renal_24hours
-
-  sepsis:
-    source: concepts.sepsis.sepsis3
-    cols:
-      - sepsis3
-      - suspected_infection_time
-      - sofa_time
-
-  mortality:
-    source: concepts.demographics.icustay_detail
-    cols:
-      - hospital_expire_flag

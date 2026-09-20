@@ -1,13 +1,7 @@
-"""Unified output schema for the Clin-JEPA data pipeline (Steps 02-03).
-
-Defines the canonical per-event column schema used by observation extraction,
-action extraction, and timeline building. Every per-stay parquet file must
-conform to this schema.
-"""
+"""Column schema shared by the per-stay observation and action event tables."""
 
 import pandas as pd
 
-# Canonical column order for per-stay parquet files
 OUTPUT_COLUMNS = [
     "stay_id",
     "timestamp",
@@ -42,14 +36,7 @@ OUTPUT_DTYPES = {
 
 
 def validate_schema(df: pd.DataFrame) -> None:
-    """Validate that a DataFrame matches the output schema.
-
-    Args:
-        df: DataFrame to validate.
-
-    Raises:
-        ValueError: If columns don't match the expected schema.
-    """
+    """Raise if the columns are not exactly ``OUTPUT_COLUMNS``."""
     missing = set(OUTPUT_COLUMNS) - set(df.columns)
     if missing:
         raise ValueError(f"Missing columns: {missing}")

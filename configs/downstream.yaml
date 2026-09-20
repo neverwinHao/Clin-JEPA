@@ -1,0 +1,78 @@
+data_dir: ${CLIN_JEPA_DATA}
+embedding_dir: ${CLIN_JEPA_DATA}/embeddings
+rollout_dir: ${CLIN_JEPA_OUTPUT}/rollout
+output_dir: ${CLIN_JEPA_OUTPUT}/downstream
+n_workers: 16
+
+embedding_dim: 4096
+rollout_horizons: [8, 24, 48]
+
+mimic:
+  icustays: ${MIMIC_RAW}/icu/icustays.csv.gz
+  admissions: ${MIMIC_RAW}/hosp/admissions.csv.gz
+  patients: ${MIMIC_RAW}/hosp/patients.csv.gz
+  ventilation: ${MIMIC_RAW}/concepts/treatment/ventilation.csv
+
+tabular:
+  medication_classes: configs/medication_classes.yaml
+  trajectory_config: configs/data/trajectories.yaml
+  n_items: 150
+  n_ventilator_modes: 8
+
+readout:
+  seed: 42
+  E1: {widths: [512, 512], dropout: 0.1, lr: 1.0e-3, weight_decay: 1.0e-4, batch_size: 8192, max_epochs: 30,
+       patience: 5, standardize: false, warmup_fraction: 0.1, eval_batch_size: 65536}
+  E2: {widths: [512, 512], dropout: 0.3, lr: 3.0e-4, weight_decay: 1.0e-2, batch_size: 4096, max_epochs: 50,
+       patience: 8, standardize: true, warmup_fraction: null, eval_batch_size: 65536}
+  E3: {widths: [512], dropout: 0.1, lr: 1.0e-3, weight_decay: 1.0e-4, batch_size: 4096, max_epochs: 50,
+       patience: 10, standardize: false, warmup_fraction: null, eval_batch_size: 65536}
+  seeds:
+    - {encoder: sft_baseline, task: mortality_7d, variant: hist, seed: 43}
+    - {encoder: sft_baseline, task: mortality_14d, variant: hist, seed: 43}
+    - {encoder: sft_baseline, task: mortality_30d, variant: hist, seed: 43}
+    - {encoder: sft_baseline, task: mortality_30d, variant: full, seed: 43}
+    - {encoder: sft_baseline, task: sepsis_ever, variant: full, seed: 43}
+
+baselines:
+  seed: 42
+  ridge:
+    n_configurations: 6
+    max_iter: 5000
+    grid:
+      C: [1.0e-3, 1.0e-2, 1.0e-1, 1.0, 10.0, 100.0]
+  lightgbm:
+    n_configurations: 20
+    n_estimators: 2000
+    early_stopping_rounds: 50
+    subsample_freq: 5
+    grid:
+      num_leaves: [15, 31, 63, 127]
+      max_depth: [4, 6, 8, -1]
+      min_data_in_leaf: [20, 50, 100, 500]
+      learning_rate: [0.02, 0.05, 0.1]
+      feature_fraction: [0.7, 0.9, 1.0]
+      bagging_fraction: [0.7, 0.9, 1.0]
+      reg_lambda: [0.0, 1.0, 10.0]
+  sequence:
+    n_configurations: 16
+    max_epochs: 50
+    patience: 8
+    min_improvement: 1.0e-6
+    batch_size: 8192
+    grad_clip: 1.0
+    final_lr_ratio: 0.01
+    head_hidden: 256
+    tcn_base_layers: 2
+    tcn_kernel: 3
+    grid:
+      hidden_size: [128, 256, 384]
+      num_layers: [1, 2, 3]
+      lr: [3.0e-4, 1.0e-3, 3.0e-3]
+      weight_decay: [1.0e-5, 1.0e-4, 1.0e-3]
+      dropout: [0.0, 0.1, 0.3]
+
+bootstrap:
+  draws: 500
+  seed: 42
+  paired: [clin_jepa_hist, clmbr]
