@@ -1,14 +1,16 @@
-# Clin-JEPA
+<h1 align="center">Clin-JEPA</h1>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+<p align="center"><b>A Multi-Phase Co-Training Framework for Joint-Embedding Predictive Pretraining on EHR Patient Trajectories</b></p>
+
+<p align="center">
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+  <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.10+-blue.svg" alt="Python 3.10+"></a>
+</p>
 
 > [!IMPORTANT]
 > ### 📢 News
 > - **[Sep 2026] ✨ Full pipeline released.** This repository now contains the complete end-to-end pipeline behind the paper, from raw MIMIC-IV to every figure and table: data processing, training of all six models, latent rollout, and the three evaluations (rollout stability, latent geometry, and the 34-task downstream benchmark). Each stage has a step-by-step guide in [`docs/`](docs).
 > - **[Sep 2026] 🤗 Open-source model release.** The pretrained Clin-JEPA backbone, the co-trained encoder adapters together with the latent trajectory predictor, is being prepared for public release with loading code. Details will be announced here.
-
-Reference implementation of **Clin-JEPA: A Multi-Phase Co-Training Framework for Joint-Embedding Predictive Pretraining on EHR Patient Trajectories**.
 
 > **Note:** This repository accompanies a paper currently under double-blind review. Author, citation, and funding information have been omitted from this version and will be added once review concludes.
 
@@ -46,17 +48,17 @@ Compute: the data stage runs on CPU nodes in under an hour as ten-task arrays. C
 
 Each stage has a guide in [`docs/`](docs) with its inputs, commands, outputs and resources.
 
-| stage | guide | code | produces |
-|---|---|---|---|
-| 00 | [setup](docs/00-setup.md) | | environment, data access, paths |
-| 01 | [data](docs/01-data.md) | `clin_jepa.data` | cohort, hourly bins, split, trajectory shards, the feature table of Appendix A |
-| 02 | [encoders](docs/02-encoders.md) | `clin_jepa.training` | encoder SFT, Clin-JEPA curriculum, V-JEPA 2-AC style refinement, the two ablations |
-| 03 | [embeddings](docs/03-embeddings.md) | `clin_jepa.encode` | one embedding cache per encoder |
-| 04 | [predictors](docs/04-predictors.md) | `clin_jepa.training` | predictors on frozen encoders |
-| 05 | [rollout](docs/05-rollout.md) | `clin_jepa.rollout` | pooled rollout blocks and per-step errors |
-| 06 | [stability](docs/06-stability.md) | `clin_jepa.stability` | Fig. 2, Table 2, Appendices C–D |
-| 07 | [geometry](docs/07-geometry.md) | `clin_jepa.geometry` | Fig. 3, Table 3, Appendix E |
-| 08 | [downstream](docs/08-downstream.md) | `clin_jepa.downstream` | Fig. 4, Table 4, the per-task tables |
+| stage | guide                               | code                   | produces                                                                           |
+| ----- | ----------------------------------- | ---------------------- | ---------------------------------------------------------------------------------- |
+| 00    | [setup](docs/00-setup.md)           |                        | environment, data access, paths                                                    |
+| 01    | [data](docs/01-data.md)             | `clin_jepa.data`       | cohort, hourly bins, split, trajectory shards, the feature table of Appendix A     |
+| 02    | [encoders](docs/02-encoders.md)     | `clin_jepa.training`   | encoder SFT, Clin-JEPA curriculum, V-JEPA 2-AC style refinement, the two ablations |
+| 03    | [embeddings](docs/03-embeddings.md) | `clin_jepa.encode`     | one embedding cache per encoder                                                    |
+| 04    | [predictors](docs/04-predictors.md) | `clin_jepa.training`   | predictors on frozen encoders                                                      |
+| 05    | [rollout](docs/05-rollout.md)       | `clin_jepa.rollout`    | pooled rollout blocks and per-step errors                                          |
+| 06    | [stability](docs/06-stability.md)   | `clin_jepa.stability`  | Fig. 2, Table 2, Appendices C–D                                                    |
+| 07    | [geometry](docs/07-geometry.md)     | `clin_jepa.geometry`   | Fig. 3, Table 3, Appendix E                                                        |
+| 08    | [downstream](docs/08-downstream.md) | `clin_jepa.downstream` | Fig. 4, Table 4, the per-task tables                                               |
 
 ## Layout
 
