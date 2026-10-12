@@ -10,7 +10,19 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
 authors = [
-    { name = "Anonymous" },
+    { name = "Yixuan Yang", email = "yixuan.yang@duke.edu" },
+    { name = "Mehak Arora" },
+    { name = "Ryan Zhang" },
+    { name = "Baraa Abed" },
+    { name = "Junseob Kim" },
+    { name = "Tilendra Choudhary" },
+    { name = "Md Hassanuzzaman" },
+    { name = "Kevin Zhu" },
+    { name = "Ayman Ali" },
+    { name = "Chengkun Yang" },
+    { name = "Alasdair Edward Gent" },
+    { name = "Victor Moas" },
+    { name = "Rishikesan Kamaleswaran" },
 ]
 keywords = [
     "jepa",
@@ -57,6 +69,11 @@ dev = [
 clmbr = [
     "msgpack>=1,<2",
 ]
+
+[project.urls]
+Paper = "https://arxiv.org/abs/2605.10840"
+Repository = "https://github.com/Kamaleswaran-Lab/Clin-JEPA"
+Issues = "https://github.com/Kamaleswaran-Lab/Clin-JEPA/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]

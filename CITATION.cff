@@ -1,0 +1,96 @@
+cff-version: 1.2.0
+title: "Clin-JEPA: A Multi-Phase Co-Training Framework for Joint-Embedding Predictive Pretraining on EHR Patient Trajectories"
+message: "If you use this software or build on this work, please cite the accompanying paper."
+type: software
+license: MIT
+repository-code: "https://github.com/Kamaleswaran-Lab/Clin-JEPA"
+url: "https://arxiv.org/abs/2605.10840"
+authors:
+  - given-names: Yixuan
+    family-names: Yang
+    email: yixuan.yang@duke.edu
+    affiliation: Duke University
+  - given-names: Mehak
+    family-names: Arora
+    affiliation: Duke University
+  - given-names: Ryan
+    family-names: Zhang
+    affiliation: Duke University
+  - given-names: Baraa
+    family-names: Abed
+    affiliation: Duke University
+  - given-names: Junseob
+    family-names: Kim
+    affiliation: Duke University
+  - given-names: Tilendra
+    family-names: Choudhary
+    affiliation: Duke University
+  - given-names: Md
+    family-names: Hassanuzzaman
+    affiliation: Duke University
+  - given-names: Kevin
+    family-names: Zhu
+    affiliation: Duke University
+  - given-names: Ayman
+    family-names: Ali
+    affiliation: Duke University
+  - given-names: Chengkun
+    family-names: Yang
+    affiliation: Duke University
+  - given-names: Alasdair Edward
+    family-names: Gent
+    affiliation: Duke University
+  - given-names: Victor
+    family-names: Moas
+    affiliation: Duke University
+  - given-names: Rishikesan
+    family-names: Kamaleswaran
+    affiliation: Duke University
+preferred-citation:
+  type: article
+  title: "Clin-JEPA: A Multi-Phase Co-Training Framework for Joint-Embedding Predictive Pretraining on EHR Patient Trajectories"
+  year: 2026
+  journal: "arXiv preprint arXiv:2605.10840"
+  doi: 10.48550/arXiv.2605.10840
+  url: "https://arxiv.org/abs/2605.10840"
+  authors:
+    - given-names: Yixuan
+      family-names: Yang
+      email: yixuan.yang@duke.edu
+      affiliation: Duke University
+    - given-names: Mehak
+      family-names: Arora
+      affiliation: Duke University
+    - given-names: Ryan
+      family-names: Zhang
+      affiliation: Duke University
+    - given-names: Baraa
+      family-names: Abed
+      affiliation: Duke University
+    - given-names: Junseob
+      family-names: Kim
+      affiliation: Duke University
+    - given-names: Tilendra
+      family-names: Choudhary
+      affiliation: Duke University
+    - given-names: Md
+      family-names: Hassanuzzaman
+      affiliation: Duke University
+    - given-names: Kevin
+      family-names: Zhu
+      affiliation: Duke University
+    - given-names: Ayman
+      family-names: Ali
+      affiliation: Duke University
+    - given-names: Chengkun
+      family-names: Yang
+      affiliation: Duke University
+    - given-names: Alasdair Edward
+      family-names: Gent
+      affiliation: Duke University
+    - given-names: Victor
+      family-names: Moas
+      affiliation: Duke University
+    - given-names: Rishikesan
+      family-names: Kamaleswaran
+      affiliation: Duke University

@@ -3,6 +3,14 @@
 <p align="center"><b>A Multi-Phase Co-Training Framework for Joint-Embedding Predictive Pretraining on EHR Patient Trajectories</b></p>
 
 <p align="center">
+  Yixuan Yang, Mehak Arora, Ryan Zhang, Baraa Abed, Junseob Kim, Tilendra Choudhary, Md Hassanuzzaman,<br>
+  Kevin Zhu, Ayman Ali, Chengkun Yang, Alasdair Edward Gent, Victor Moas, Rishikesan Kamaleswaran
+</p>
+
+<p align="center">Duke University</p>
+
+<p align="center">
+  <a href="https://arxiv.org/abs/2605.10840"><img src="https://img.shields.io/badge/arXiv-2605.10840-b31b1b.svg" alt="arXiv"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.10+-blue.svg" alt="Python 3.10+"></a>
 </p>
@@ -10,9 +18,6 @@
 > [!IMPORTANT]
 > ### 📢 News
 > - **[Sep 2026] ✨ Full pipeline released.** This repository now contains the complete end-to-end pipeline behind the paper, from raw MIMIC-IV to every figure and table: data processing, training of all six models, latent rollout, and the three evaluations (rollout stability, latent geometry, and the 34-task downstream benchmark). Each stage has a step-by-step guide in [`docs/`](docs).
-> - **[Sep 2026] 🤗 Open-source model release.** The pretrained Clin-JEPA backbone, the co-trained encoder adapters together with the latent trajectory predictor, is being prepared for public release with loading code. Details will be announced here.
-
-> **Note:** This repository accompanies a paper currently under double-blind review. Author, citation, and funding information have been omitted from this version and will be added once review concludes.
 
 Clin-JEPA is a latent world model for intensive-care patient trajectories. An LLM encoder reads each hour of the record as text, observations and interventions separately, so no feature engineering or vocabulary mapping is needed. An action-conditioned Transformer predictor rolls the patient state forward in the encoder's latent space under the recorded interventions, and is kept at inference.
 
@@ -34,7 +39,7 @@ The code that takes MIMIC-IV v3.1 to every figure and table of the paper's exper
 ## Getting started
 
 ```bash
-git clone <repository-url> && cd Clin-JEPA
+git clone https://github.com/Kamaleswaran-Lab/Clin-JEPA.git && cd Clin-JEPA
 pip install -r requirements.txt && pip install -e .
 pip install flash-attn==2.8.3 --no-build-isolation   # on a GPU node with the CUDA toolkit
 cp .env.example .env                                 # paths to MIMIC-IV, the outputs and the Hugging Face cache
@@ -84,12 +89,26 @@ Experiments use MIMIC-IV v3.1 ([Johnson et al., 2023](https://physionet.org/cont
 
 ## Citation
 
-Citation information has been omitted while this work is under double-blind review, and will be added once review concludes.
+If you use this code or build on this work, please cite the paper:
+
+```bibtex
+@misc{yang2026clinjepamultiphasecotrainingframework,
+  title         = {Clin-JEPA: A Multi-Phase Co-Training Framework for Joint-Embedding Predictive Pretraining on EHR Patient Trajectories},
+  author        = {Yixuan Yang and Mehak Arora and Ryan Zhang and Baraa Abed and Junseob Kim and
+                   Tilendra Choudhary and Md Hassanuzzaman and Kevin Zhu and Ayman Ali and Chengkun Yang and
+                   Alasdair Edward Gent and Victor Moas and Rishikesan Kamaleswaran},
+  year          = {2026},
+  eprint        = {2605.10840},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2605.10840}
+}
+```
 
 ## License
 
 This code is released under the [MIT License](LICENSE). MIMIC-IV data is governed separately by the PhysioNet Credentialed Health Data License.
 
-## Acknowledgments
+## Contact
 
-We thank the MIMIC-IV team at the MIT Laboratory for Computational Physiology and Beth Israel Deaconess Medical Center for making the dataset publicly available. Funding acknowledgments have been omitted for anonymity and will be added once review concludes.
+Yixuan Yang (yixuan.yang@duke.edu).
