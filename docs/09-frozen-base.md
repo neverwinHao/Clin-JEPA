@@ -76,3 +76,40 @@ Verify the saved predictor can be reloaded and reproduces its validation loss:
     CUDA_VISIBLE_DEVICES=0 "$CLIN_JEPA_PYTHON" -m scripts.validate_smoke_predictor \
       --checkpoint "$SMOKE/predictor_qwen3_base_smoke/best.pt" \
       --embedding-dir "$SMOKE/processed/embeddings/qwen3_base"
+
+## Patient-sampled experiment
+
+To obtain an exploratory result sooner, sample patients independently within
+existing train/validation/test splits. The defaults select 1,000 / 200 / 200
+patients with seed 42 and retain all their stays and windows. This produces a
+new dataset and refuses to overwrite an existing one. The result is not a full
+cohort estimate; compare models on the same held-out patients.
+
+    set -a; source .env; set +a
+    EXP=/path/to/new/experiment
+    mkdir -p "$EXP/logs"
+    "$CLIN_JEPA_PYTHON" scripts/sample_trajectories.py \
+      --source "$CLIN_JEPA_DATA" --output "$EXP/processed"
+    "$CLIN_JEPA_PYTHON" scripts/validate_trajectories.py --data "$EXP/processed"
+    "$CLIN_JEPA_PYTHON" scripts/validate_sample_source.py \
+      --source "$CLIN_JEPA_DATA" --sample "$EXP/processed"
+    touch "$EXP/processed/.progress/validation.done"
+    # Start one process on each idle GPU; all processes share file locks.
+    for gpu in 0 1 2; do
+      CUDA_VISIBLE_DEVICES="$gpu" CLIN_JEPA_DATA="$EXP/processed" \
+        "$CLIN_JEPA_PYTHON" -m clin_jepa.encode_stream \
+        --complete-marker "$EXP/processed/.progress/validation.done" &
+    done
+    wait
+    "$CLIN_JEPA_PYTHON" scripts/validate_embedding_caches.py --data "$EXP/processed"
+    CUDA_VISIBLE_DEVICES=0 CLIN_JEPA_DATA="$EXP/processed" CLIN_JEPA_OUTPUT="$EXP/output" \
+      "$CLIN_JEPA_PYTHON" -m clin_jepa.training.train_predictor \
+      --config configs/train/predictor_frozen_base.yaml
+    CUDA_VISIBLE_DEVICES=0 CLIN_JEPA_DATA="$EXP/processed" CLIN_JEPA_OUTPUT="$EXP/output" \
+      "$CLIN_JEPA_PYTHON" -m clin_jepa.rollout \
+      --config configs/rollout_frozen_base.yaml --model qwen3_base --split test
+    "$CLIN_JEPA_PYTHON" scripts/summarize_rollout.py \
+      --errors "$EXP/output/rollout/qwen3_base/test/errors.npz" --output "$EXP/output/rollout_summary.json"
+
+Rollout conditions on recorded actions, including future actions; it is an
+offline diagnostic and does not establish prospective clinical performance.
