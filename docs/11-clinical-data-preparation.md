@@ -76,9 +76,9 @@ The data are at
   hospital-mortality labels and patient/stay identifiers;
 - `mortality_dataset/metadata.json`: aggregate counts and assumptions.
 
-The mortality classifier, AUROC, and AUPRC remain to be run. Tune only on
-train/validation and evaluate once on the patient-disjoint test split;
-resampling should cluster by patient.
+The mortality probe has since been run; see [the probe protocol and results](12-mortality-probe.md).
+It was tuned on train/validation and evaluated on the patient-disjoint test
+split with patient-clustered resampling.
 
 ## Reproduction
 
