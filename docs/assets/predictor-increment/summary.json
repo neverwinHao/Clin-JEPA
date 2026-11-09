@@ -1,0 +1,3585 @@
+{
+  "protocol": {
+    "seed": 42,
+    "bootstrap_draws": 2000,
+    "bootstrap_unit": "patient",
+    "history_projection": "existing 64D training-admission history PCA",
+    "prediction_projection": "existing 32D training-window PCA per horizon",
+    "copy_projection": "separate 32D PCA fitted on training-window copy-forward summaries",
+    "copy_definition": "repeat last observed state; future summary [last, zero, last]",
+    "future_policy": "Observed context then synthetic no-interventions; not a causal counterfactual",
+    "classifier": "L2 logistic regression with balanced classes; per-task C selected by validation AUROC",
+    "test_metric": "window-weighted AUROC and average precision",
+    "caveat": "small sample and multiple outcomes; no clinical claims"
+  },
+  "groups": [
+    {
+      "group": "E1",
+      "tasks": 8,
+      "scores": {
+        "history_64": {
+          "auroc": 0.6491577137459958,
+          "auprc": 0.1106642053487959
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.626143154243409,
+          "auprc": 0.09781030986444428
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.6563143436528026,
+          "auprc": 0.10701689692353977
+        }
+      }
+    },
+    {
+      "group": "E2",
+      "tasks": 18,
+      "scores": {
+        "history_64": {
+          "auroc": 0.6746880336390422,
+          "auprc": 0.30838440621622865
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.6784299382002894,
+          "auprc": 0.3162631451627384
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.6779482826993669,
+          "auprc": 0.30582862599150107
+        }
+      }
+    },
+    {
+      "group": "E3",
+      "tasks": 8,
+      "scores": {
+        "history_64": {
+          "auroc": 0.7740545841904518,
+          "auprc": 0.3808960559618513
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.7566953473534104,
+          "auprc": 0.3728193013991497
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.7444831007867692,
+          "auprc": 0.33986080486403325
+        }
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "task": "circ_failure_8h",
+      "group": "E1",
+      "title": "Circulatory failure, 8 h",
+      "patients": 50,
+      "positive_patients": 5,
+      "negative_patients": 47,
+      "scores": {
+        "history_64": {
+          "auroc": 0.723780487804878,
+          "auprc": 0.040020417115699265,
+          "auroc_ci95": [
+            0.5252954477024273,
+            0.9382079041412654
+          ],
+          "auprc_ci95": [
+            0.013985045976788502,
+            0.21036867084716454
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.7085365853658536,
+          "auprc": 0.04042750771495711,
+          "auroc_ci95": [
+            0.4721429130162703,
+            0.9425731329872205
+          ],
+          "auprc_ci95": [
+            0.013424330574934093,
+            0.26571447770973583
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.6884146341463414,
+          "auprc": 0.05712684304077684,
+          "auroc_ci95": [
+            0.33723905224517037,
+            0.9559694406077348
+          ],
+          "auprc_ci95": [
+            0.012676693837632482,
+            0.3460025870163539
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": -0.015243902439024404,
+            "ci95": [
+              -0.07088382086046767,
+              0.026059750015781785
+            ],
+            "valid_bootstrap_draws": 1986
+          },
+          "auprc": {
+            "difference": 0.0004070905992578436,
+            "ci95": [
+              -0.017741414261522682,
+              0.04579979963371478
+            ],
+            "valid_bootstrap_draws": 1986
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.020121951219512213,
+            "ci95": [
+              -0.11643356643356638,
+              0.20631192731693523
+            ],
+            "valid_bootstrap_draws": 1986
+          },
+          "auprc": {
+            "difference": -0.016699335325819728,
+            "ci95": [
+              -0.15338619612938673,
+              0.013278091522303394
+            ],
+            "valid_bootstrap_draws": 1986
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.03536585365853662,
+            "ci95": [
+              -0.24549779871653982,
+              0.09214699393270818
+            ],
+            "valid_bootstrap_draws": 1986
+          },
+          "auprc": {
+            "difference": 0.01710642592507757,
+            "ci95": [
+              -0.006486861353676208,
+              0.14777551184229235
+            ],
+            "valid_bootstrap_draws": 1986
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "resp_failure_24h",
+      "group": "E1",
+      "title": "Respiratory failure, 24 h",
+      "patients": 32,
+      "positive_patients": 9,
+      "negative_patients": 31,
+      "scores": {
+        "history_64": {
+          "auroc": 0.41580903373356204,
+          "auprc": 0.10900116776095231,
+          "auroc_ci95": [
+            0.2635141214318006,
+            0.5353064335861627
+          ],
+          "auprc_ci95": [
+            0.040175596678717805,
+            0.20773623567600655
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.4556889651229274,
+          "auprc": 0.11733904401991452,
+          "auroc_ci95": [
+            0.29740865738918,
+            0.574783789574511
+          ],
+          "auprc_ci95": [
+            0.041727746047082105,
+            0.23358814209243176
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.5228702115494568,
+          "auprc": 0.13212905706751515,
+          "auroc_ci95": [
+            0.35624337369750236,
+            0.6466254412857674
+          ],
+          "auprc_ci95": [
+            0.04903390865226759,
+            0.253251229034094
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.03987993138936535,
+            "ci95": [
+              -0.023461667275605867,
+              0.08651339699726798
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.008337876258962207,
+            "ci95": [
+              -0.0010982267201986309,
+              0.029053276845107574
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": -0.0671812464265294,
+            "ci95": [
+              -0.15556230700732063,
+              -0.005492390531074547
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.014790013047600636,
+            "ci95": [
+              -0.04482600484102091,
+              -0.000584442181884694
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": 0.10706117781589475,
+            "ci95": [
+              0.06026508931681349,
+              0.1553059395801331
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.023127889306562843,
+            "ci95": [
+              0.00588348076990745,
+              0.05427402690498069
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": [
+        "Fewer than 5 patients in one class in val"
+      ]
+    },
+    {
+      "task": "kidney_failure_48h",
+      "group": "E1",
+      "title": "Kidney failure, 48 h",
+      "patients": 150,
+      "positive_patients": 23,
+      "negative_patients": 142,
+      "scores": {
+        "history_64": {
+          "auroc": 0.6251337613697164,
+          "auprc": 0.15343478938421998,
+          "auroc_ci95": [
+            0.4757471164570393,
+            0.7606746971034964
+          ],
+          "auprc_ci95": [
+            0.08281304329348725,
+            0.2919934539854333
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.6343298555377207,
+          "auprc": 0.1521469657394284,
+          "auroc_ci95": [
+            0.5001547978295364,
+            0.7509403820068004
+          ],
+          "auprc_ci95": [
+            0.08340853031539666,
+            0.27908073725521515
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.6098180845371857,
+          "auprc": 0.13818599010429575,
+          "auroc_ci95": [
+            0.48234981294817436,
+            0.7275712706651286
+          ],
+          "auprc_ci95": [
+            0.07780113414175542,
+            0.25107020006609837
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.009196094168004265,
+            "ci95": [
+              -0.06260578126736942,
+              0.09980895667038227
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.0012878236447915747,
+            "ci95": [
+              -0.05114039281605382,
+              0.03548516466407389
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.024511771000535032,
+            "ci95": [
+              -0.006656914893617043,
+              0.05737123852167008
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.013960975635132655,
+            "ci95": [
+              -0.019935513755019205,
+              0.059276499078991955
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.015315676832530767,
+            "ci95": [
+              -0.09463254401570538,
+              0.07806010393807088
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.01524879927992423,
+            "ci95": [
+              -0.06378143228954261,
+              0.013591121585083863
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "liver_failure_48h",
+      "group": "E1",
+      "title": "Liver failure, 48 h",
+      "patients": 54,
+      "positive_patients": 5,
+      "negative_patients": 52,
+      "scores": {
+        "history_64": {
+          "auroc": 0.5354192740926158,
+          "auprc": 0.08743295328905476,
+          "auroc_ci95": [
+            0.39775144954610286,
+            0.8680324109463387
+          ],
+          "auprc_ci95": [
+            0.04156894362510099,
+            0.3174719902060253
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.5669586983729662,
+          "auprc": 0.11214664668660598,
+          "auroc_ci95": [
+            0.4321126242178874,
+            0.9602771455780995
+          ],
+          "auprc_ci95": [
+            0.06268286048172118,
+            0.5
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.5809762202753441,
+          "auprc": 0.09427565131702198,
+          "auroc_ci95": [
+            0.43223920015091494,
+            0.8806037735849058
+          ],
+          "auprc_ci95": [
+            0.045958149228527485,
+            0.33687880874748705
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.03153942428035039,
+            "ci95": [
+              -0.06175559740531496,
+              0.1709962168978562
+            ],
+            "valid_bootstrap_draws": 1993
+          },
+          "auprc": {
+            "difference": 0.024713693397551223,
+            "ci95": [
+              -0.004438690132017024,
+              0.22789541329022814
+            ],
+            "valid_bootstrap_draws": 1993
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": -0.014017521902377927,
+            "ci95": [
+              -0.11322469718023216,
+              0.13923992673992672
+            ],
+            "valid_bootstrap_draws": 1993
+          },
+          "auprc": {
+            "difference": 0.017870995369584003,
+            "ci95": [
+              -0.04611666699173832,
+              0.2135776518500337
+            ],
+            "valid_bootstrap_draws": 1993
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": 0.04555694618272832,
+            "ci95": [
+              0.0,
+              0.0801505684893962
+            ],
+            "valid_bootstrap_draws": 1993
+          },
+          "auprc": {
+            "difference": 0.00684269802796722,
+            "ci95": [
+              -0.04625084426995394,
+              0.1117731225992139
+            ],
+            "valid_bootstrap_draws": 1993
+          }
+        }
+      },
+      "warnings": [
+        "Fewer than 5 patients in one class in val"
+      ]
+    },
+    {
+      "task": "hyperglycemia_8h",
+      "group": "E1",
+      "title": "Hyperglycemia, 8 h",
+      "patients": 84,
+      "positive_patients": 19,
+      "negative_patients": 77,
+      "scores": {
+        "history_64": {
+          "auroc": 0.5212765957446808,
+          "auprc": 0.1736789884641847,
+          "auroc_ci95": [
+            0.36489858940110304,
+            0.6886335676785291
+          ],
+          "auprc_ci95": [
+            0.0888511078774386,
+            0.3335993292039106
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.5437588652482269,
+          "auprc": 0.18485631295183363,
+          "auroc_ci95": [
+            0.39757649650675375,
+            0.6925037035312556
+          ],
+          "auprc_ci95": [
+            0.09590461455532413,
+            0.35776178442248785
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.5123404255319148,
+          "auprc": 0.16273221114517913,
+          "auroc_ci95": [
+            0.3635926085633117,
+            0.6738322710036393
+          ],
+          "auprc_ci95": [
+            0.08349463584600023,
+            0.3254482136623683
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.02248226950354615,
+            "ci95": [
+              -0.011379207240977785,
+              0.05428325086931506
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.011177324487648937,
+            "ci95": [
+              -0.014120302550934551,
+              0.048370328176279044
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.031418439716312085,
+            "ci95": [
+              0.004254827583381815,
+              0.06484511281420682
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.0221241018066545,
+            "ci95": [
+              -0.010783328482530323,
+              0.07663738728516978
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.008936170212765937,
+            "ci95": [
+              -0.03892329044736516,
+              0.015457228675003676
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.010946777319005563,
+            "ci95": [
+              -0.05064310404402986,
+              0.022085141542592307
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "sepsis3_8h",
+      "group": "E1",
+      "title": "Sepsis-3 onset, 8 h",
+      "patients": 96,
+      "positive_patients": 3,
+      "negative_patients": 94,
+      "scores": {
+        "history_64": {
+          "auroc": 0.8512820512820513,
+          "auprc": 0.08458141321044546,
+          "auroc_ci95": [
+            0.7727573757763975,
+            0.927027525034311
+          ],
+          "auprc_ci95": [
+            0.03370689655172414,
+            0.2770734126984126
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.8846153846153847,
+          "auprc": 0.09456699346405228,
+          "auroc_ci95": [
+            0.7825520833333334,
+            0.959110205831904
+          ],
+          "auprc_ci95": [
+            0.029870393864303284,
+            0.32538172353961803
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.8025641025641026,
+          "auprc": 0.0682047373358349,
+          "auroc_ci95": [
+            0.6946793681327205,
+            0.9595821718579566
+          ],
+          "auprc_ci95": [
+            0.022222222222222223,
+            0.24322419737125614
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.03333333333333344,
+            "ci95": [
+              -0.04548783185840704,
+              0.09929865938430979
+            ],
+            "valid_bootstrap_draws": 1894
+          },
+          "auprc": {
+            "difference": 0.009985580253606824,
+            "ci95": [
+              -0.029769427273717886,
+              0.09718721816378065
+            ],
+            "valid_bootstrap_draws": 1894
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.08205128205128209,
+            "ci95": [
+              -0.11923534292035404,
+              0.19794523109804973
+            ],
+            "valid_bootstrap_draws": 1894
+          },
+          "auprc": {
+            "difference": 0.02636225612821738,
+            "ci95": [
+              -0.12882809166265674,
+              0.20411721267454344
+            ],
+            "valid_bootstrap_draws": 1894
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.048717948717948656,
+            "ci95": [
+              -0.13924946581196576,
+              0.10299376988335097
+            ],
+            "valid_bootstrap_draws": 1894
+          },
+          "auprc": {
+            "difference": -0.016376675874610558,
+            "ci95": [
+              -0.1584437689392623,
+              0.12247086247086239
+            ],
+            "valid_bootstrap_draws": 1894
+          }
+        }
+      },
+      "warnings": [
+        "Fewer than 5 patients in one class in val",
+        "Fewer than 5 patients in one class in test"
+      ]
+    },
+    {
+      "task": "decompensation_24h",
+      "group": "E1",
+      "title": "Decompensation (ICU death), 24 h",
+      "patients": 165,
+      "positive_patients": 5,
+      "negative_patients": 161,
+      "scores": {
+        "history_64": {
+          "auroc": 0.9107954545454545,
+          "auprc": 0.17468154084501658,
+          "auroc_ci95": [
+            0.7940735696467855,
+            0.9929895476106536
+          ],
+          "auprc_ci95": [
+            0.014610399570519213,
+            0.6197281980839674
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.6386363636363637,
+          "auprc": 0.0257340075362357,
+          "auroc_ci95": [
+            0.24940859284890426,
+            0.9441066885180591
+          ],
+          "auprc_ci95": [
+            0.003964645167691958,
+            0.08612092656635685
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.9028409090909092,
+          "auprc": 0.12602402663192938,
+          "auroc_ci95": [
+            0.762870213167327,
+            0.9887449832351148
+          ],
+          "auprc_ci95": [
+            0.01564108981693364,
+            0.5170521077283373
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": -0.27215909090909085,
+            "ci95": [
+              -0.5610323915148314,
+              -0.04491092864204014
+            ],
+            "valid_bootstrap_draws": 1983
+          },
+          "auprc": {
+            "difference": -0.14894753330878088,
+            "ci95": [
+              -0.5470339855984443,
+              -0.010656060146399754
+            ],
+            "valid_bootstrap_draws": 1983
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": -0.2642045454545455,
+            "ci95": [
+              -0.5804956928597627,
+              -0.027920390721782665
+            ],
+            "valid_bootstrap_draws": 1983
+          },
+          "auprc": {
+            "difference": -0.10029001909569368,
+            "ci95": [
+              -0.45786708544549504,
+              -0.006880221802881569
+            ],
+            "valid_bootstrap_draws": 1983
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.007954545454545325,
+            "ci95": [
+              -0.04995365719734055,
+              0.04601296848751665
+            ],
+            "valid_bootstrap_draws": 1983
+          },
+          "auprc": {
+            "difference": -0.0486575142130872,
+            "ci95": [
+              -0.19978867470998035,
+              0.019882837786993294
+            ],
+            "valid_bootstrap_draws": 1983
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "composite_deterioration_24h",
+      "group": "E1",
+      "title": "Composite deterioration, 24 h",
+      "patients": 165,
+      "positive_patients": 19,
+      "negative_patients": 159,
+      "scores": {
+        "history_64": {
+          "auroc": 0.6097650513950074,
+          "auprc": 0.0624823727207941,
+          "auroc_ci95": [
+            0.4726259878827482,
+            0.7290171102661596
+          ],
+          "auprc_ci95": [
+            0.034711351273987556,
+            0.1390013235801791
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.5766205160478288,
+          "auprc": 0.05526500080252663,
+          "auroc_ci95": [
+            0.448274251452605,
+            0.6960756551446955
+          ],
+          "auprc_ci95": [
+            0.03182627651819976,
+            0.11453221313764972
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.630690161527166,
+          "auprc": 0.07745665874576504,
+          "auroc_ci95": [
+            0.5148670298427174,
+            0.7338746024534302
+          ],
+          "auprc_ci95": [
+            0.03983056781518413,
+            0.18706215495820988
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": -0.03314453534717854,
+            "ci95": [
+              -0.08206184959459557,
+              0.011041295839517488
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.007217371918267469,
+            "ci95": [
+              -0.05068142003614112,
+              0.024116829253268773
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": -0.054069645479337125,
+            "ci95": [
+              -0.10446858277732139,
+              -0.0014324373923857204
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.022191657943238415,
+            "ci95": [
+              -0.09289550944137391,
+              0.0002400133633664097
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": 0.020925110132158586,
+            "ci95": [
+              -0.04817768580104102,
+              0.08489847324492426
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.014974286024970945,
+            "ci95": [
+              -0.012279068528833653,
+              0.08443543451980319
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "vaso_onset_8h",
+      "group": "E2",
+      "title": "Vasopressor onset, 8 h",
+      "patients": 110,
+      "positive_patients": 8,
+      "negative_patients": 108,
+      "scores": {
+        "history_64": {
+          "auroc": 0.6037985865724381,
+          "auprc": 0.038574625988168645,
+          "auroc_ci95": [
+            0.41283483521556236,
+            0.7847992123838333
+          ],
+          "auprc_ci95": [
+            0.01623528711030239,
+            0.10213751026426868
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.5477031802120141,
+          "auprc": 0.03318606186124589,
+          "auroc_ci95": [
+            0.349620963423436,
+            0.7307123050178606
+          ],
+          "auprc_ci95": [
+            0.01440492521412984,
+            0.08409016124966416
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.5830388692579505,
+          "auprc": 0.05291818286654389,
+          "auroc_ci95": [
+            0.3758534110720512,
+            0.7775850138394622
+          ],
+          "auprc_ci95": [
+            0.01569625048870575,
+            0.20809856332421373
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": -0.05609540636042398,
+            "ci95": [
+              -0.2532160326086956,
+              0.1314865196078426
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.0053885641269227555,
+            "ci95": [
+              -0.0459371569232516,
+              0.01909810249187894
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": -0.035335689045936314,
+            "ci95": [
+              -0.13963707902267225,
+              0.06944444444444442
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.019732121005298003,
+            "ci95": [
+              -0.14577667207396458,
+              0.0029395361805107535
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.02075971731448767,
+            "ci95": [
+              -0.26945596884438083,
+              0.18839053865968663
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.014343556878375248,
+            "ci95": [
+              -0.04174252840612696,
+              0.14891545109455734
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "vaso_onset_24h",
+      "group": "E2",
+      "title": "Vasopressor onset, 24 h",
+      "patients": 110,
+      "positive_patients": 11,
+      "negative_patients": 106,
+      "scores": {
+        "history_64": {
+          "auroc": 0.45636363636363636,
+          "auprc": 0.05076943844546317,
+          "auroc_ci95": [
+            0.31585180094010573,
+            0.6146163489226492
+          ],
+          "auprc_ci95": [
+            0.025658580536120478,
+            0.1022128798861152
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.4577272727272727,
+          "auprc": 0.04983381793380996,
+          "auroc_ci95": [
+            0.309749373433584,
+            0.6217264890282133
+          ],
+          "auprc_ci95": [
+            0.025886121839391592,
+            0.09671721786848504
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.4515909090909091,
+          "auprc": 0.05290954300660759,
+          "auroc_ci95": [
+            0.2919593369918551,
+            0.6187068699372251
+          ],
+          "auprc_ci95": [
+            0.026223423170588234,
+            0.10876201748752504
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.0013636363636363447,
+            "ci95": [
+              -0.06815105235221709,
+              0.06711273173391491
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.000935620511653211,
+            "ci95": [
+              -0.016729934467532015,
+              0.008065907283961836
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.0061363636363636065,
+            "ci95": [
+              -0.05263745300751879,
+              0.07466164752753691
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.0030757250727976304,
+            "ci95": [
+              -0.019902286055093487,
+              0.004274743568821235
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.004772727272727262,
+            "ci95": [
+              -0.06783806430642006,
+              0.05474703791051819
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.0021401045611444194,
+            "ci95": [
+              -0.008779970644648388,
+              0.016513855030113638
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "vaso_escalation_24h",
+      "group": "E2",
+      "title": "Vasopressor escalation, 24 h",
+      "patients": 29,
+      "positive_patients": 10,
+      "negative_patients": 27,
+      "scores": {
+        "history_64": {
+          "auroc": 0.6739231125521075,
+          "auprc": 0.18598288148393008,
+          "auroc_ci95": [
+            0.5480030345251345,
+            0.8256593045112782
+          ],
+          "auprc_ci95": [
+            0.10584282806040253,
+            0.410480612795033
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.651227420101899,
+          "auprc": 0.2093169520734871,
+          "auroc_ci95": [
+            0.5011687424597261,
+            0.8783127563226246
+          ],
+          "auprc_ci95": [
+            0.11762139985302457,
+            0.5078992673913174
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.7072718851320056,
+          "auprc": 0.2543507042876145,
+          "auroc_ci95": [
+            0.5968062567132115,
+            0.8458404356060606
+          ],
+          "auprc_ci95": [
+            0.12289490339614302,
+            0.5104162708051455
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": -0.022695692450208416,
+            "ci95": [
+              -0.12607217791331096,
+              0.14718842419956282
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.023334070589557027,
+            "ci95": [
+              -0.07545021544320094,
+              0.202157343217923
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": -0.056044465030106516,
+            "ci95": [
+              -0.14912374686716784,
+              0.1099121660859464
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.04503375221412742,
+            "ci95": [
+              -0.19535863731525607,
+              0.15105718982577349
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": 0.0333487725798981,
+            "ci95": [
+              -0.03795328864683702,
+              0.08156079636155536
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.06836782280368445,
+            "ci95": [
+              -0.062225520588453084,
+              0.1974580862258726
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "vaso_liberation_24h",
+      "group": "E2",
+      "title": "Vasopressor liberation, 24 h",
+      "patients": 30,
+      "positive_patients": 19,
+      "negative_patients": 20,
+      "scores": {
+        "history_64": {
+          "auroc": 0.6926040061633282,
+          "auprc": 0.4090164954254206,
+          "auroc_ci95": [
+            0.5270434818104333,
+            0.8439374463590149
+          ],
+          "auprc_ci95": [
+            0.2572278603001879,
+            0.6329035060561621
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.6890087313816127,
+          "auprc": 0.43524353994570425,
+          "auroc_ci95": [
+            0.5345381883741259,
+            0.8414513237727522
+          ],
+          "auprc_ci95": [
+            0.27865810692659126,
+            0.6478175534072724
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.6954288649203902,
+          "auprc": 0.37736426474524604,
+          "auroc_ci95": [
+            0.5295581371753247,
+            0.8381281661600809
+          ],
+          "auprc_ci95": [
+            0.23951967379512182,
+            0.6174272203864432
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": -0.0035952747817155073,
+            "ci95": [
+              -0.02809830660051785,
+              0.0247972846063876
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.026227044520283627,
+            "ci95": [
+              -0.033160792646826025,
+              0.08427268971117632
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": -0.006420133538777573,
+            "ci95": [
+              -0.03315399691315477,
+              0.03766485398930116
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.05787927520045821,
+            "ci95": [
+              -0.013247559881921977,
+              0.11541672329276377
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": 0.0028248587570620654,
+            "ci95": [
+              -0.034253132832080146,
+              0.03237299980721031
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.03165223068017459,
+            "ci95": [
+              -0.08903828544129369,
+              0.04022268042655086
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "imv_onset_24h",
+      "group": "E2",
+      "title": "Invasive ventilation onset, 24 h",
+      "patients": 149,
+      "positive_patients": 12,
+      "negative_patients": 145,
+      "scores": {
+        "history_64": {
+          "auroc": 0.7256951491779988,
+          "auprc": 0.1524931620138053,
+          "auroc_ci95": [
+            0.5829128397814411,
+            0.8153875968992248
+          ],
+          "auprc_ci95": [
+            0.05875009250176782,
+            0.31183942201528764
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.7184899533184493,
+          "auprc": 0.1771303784889192,
+          "auroc_ci95": [
+            0.5536498468742461,
+            0.8137927138198606
+          ],
+          "auprc_ci95": [
+            0.05217175678411759,
+            0.35033318778318184
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.7147351329409377,
+          "auprc": 0.15728765896199223,
+          "auroc_ci95": [
+            0.5445842718236334,
+            0.8141348201427827
+          ],
+          "auprc_ci95": [
+            0.05703645155570639,
+            0.32397374563296677
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": -0.007205195859549485,
+            "ci95": [
+              -0.0548103707886316,
+              0.016346661002247093
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.024637216475113882,
+            "ci95": [
+              -0.06215052905249374,
+              0.0907196614474753
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.003754820377511625,
+            "ci95": [
+              -0.05673045458298347,
+              0.0440064718297317
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.019842719526926955,
+            "ci95": [
+              -0.05423164238181308,
+              0.08615732418023053
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.01096001623706111,
+            "ci95": [
+              -0.07836106674909411,
+              0.03763266145619074
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.004794496948186927,
+            "ci95": [
+              -0.03125876370936637,
+              0.04135700550275758
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "imv_liberation_48h",
+      "group": "E2",
+      "title": "Ventilator liberation, 48 h",
+      "patients": 32,
+      "positive_patients": 27,
+      "negative_patients": 25,
+      "scores": {
+        "history_64": {
+          "auroc": 0.6427088892842316,
+          "auprc": 0.29925154399993326,
+          "auroc_ci95": [
+            0.5074562226186458,
+            0.7392311985898943
+          ],
+          "auprc_ci95": [
+            0.23010482672348023,
+            0.4134515030417132
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.6560517108462314,
+          "auprc": 0.3193836560822493,
+          "auroc_ci95": [
+            0.5338771928961601,
+            0.7511641626035727
+          ],
+          "auprc_ci95": [
+            0.23896874087537204,
+            0.4458487026267552
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.6125837632686948,
+          "auprc": 0.28920386135245735,
+          "auroc_ci95": [
+            0.49342608536285265,
+            0.7071082052241967
+          ],
+          "auprc_ci95": [
+            0.21958917470933662,
+            0.4016105851330572
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.01334282156199973,
+            "ci95": [
+              -0.024675972978476172,
+              0.0660855579605579
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.020132112082316023,
+            "ci95": [
+              -0.010082211351027909,
+              0.06344604890067991
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.04346794757753658,
+            "ci95": [
+              -0.010103834236632999,
+              0.1121707712450654
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.03017979472979193,
+            "ci95": [
+              -0.004528792861291557,
+              0.08133466100452409
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.03012512601553685,
+            "ci95": [
+              -0.07715243350528236,
+              0.020836416445533013
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.010047682647475908,
+            "ci95": [
+              -0.037196297142429724,
+              0.017332351264014882
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "rrt_onset_48h",
+      "group": "E2",
+      "title": "Renal replacement onset, 48 h",
+      "patients": 163,
+      "positive_patients": 5,
+      "negative_patients": 161,
+      "scores": {
+        "history_64": {
+          "auroc": 0.8425985778926957,
+          "auprc": 0.08542248344369481,
+          "auroc_ci95": [
+            0.7891357056816741,
+            0.9210300927894072
+          ],
+          "auprc_ci95": [
+            0.0239220626756964,
+            0.2911700191647705
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.8243912949795302,
+          "auprc": 0.11001086681165567,
+          "auroc_ci95": [
+            0.6503363397180619,
+            0.9798129601095703
+          ],
+          "auprc_ci95": [
+            0.01888747031930743,
+            0.4560419746081018
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.8594053005817711,
+          "auprc": 0.09488897749996208,
+          "auroc_ci95": [
+            0.7196839219962508,
+            0.933755349964733
+          ],
+          "auprc_ci95": [
+            0.02168667403599318,
+            0.2940740136163049
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": -0.018207282913165423,
+            "ci95": [
+              -0.169247002483784,
+              0.11410835503564874
+            ],
+            "valid_bootstrap_draws": 1993
+          },
+          "auprc": {
+            "difference": 0.02458838336796086,
+            "ci95": [
+              -0.04313332931021909,
+              0.21755704266353276
+            ],
+            "valid_bootstrap_draws": 1993
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": -0.03501400560224088,
+            "ci95": [
+              -0.1780339935313927,
+              0.18763505949126508
+            ],
+            "valid_bootstrap_draws": 1993
+          },
+          "auprc": {
+            "difference": 0.015121889311693587,
+            "ci95": [
+              -0.029938307924118914,
+              0.19113842345765425
+            ],
+            "valid_bootstrap_draws": 1993
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": 0.01680672268907546,
+            "ci95": [
+              -0.16343840594756645,
+              0.06747625044980207
+            ],
+            "valid_bootstrap_draws": 1993
+          },
+          "auprc": {
+            "difference": 0.009466494056267274,
+            "ci95": [
+              -0.0761429093636371,
+              0.060794800437703474
+            ],
+            "valid_bootstrap_draws": 1993
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "sofa_worsen_2_48h",
+      "group": "E2",
+      "title": "SOFA increase $\\geq 2$, 48 h",
+      "patients": 158,
+      "positive_patients": 48,
+      "negative_patients": 147,
+      "scores": {
+        "history_64": {
+          "auroc": 0.5378563423105519,
+          "auprc": 0.2751563659065046,
+          "auroc_ci95": [
+            0.4680607311659822,
+            0.600051076033995
+          ],
+          "auprc_ci95": [
+            0.20331455365446566,
+            0.35505850014364926
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.545557441992077,
+          "auprc": 0.28534406662792383,
+          "auroc_ci95": [
+            0.48042560527635797,
+            0.6017581016410143
+          ],
+          "auprc_ci95": [
+            0.2112724020133836,
+            0.36678886920251264
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.5326076101068611,
+          "auprc": 0.273616427576872,
+          "auroc_ci95": [
+            0.47087668544695527,
+            0.5891655309785265
+          ],
+          "auprc_ci95": [
+            0.20041049462313362,
+            0.3532850103945149
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.007701099681525103,
+            "ci95": [
+              -0.013086387518939696,
+              0.03285729267091276
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.010187700721419224,
+            "ci95": [
+              -0.007160448336988362,
+              0.030491059480185143
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.012949831885215923,
+            "ci95": [
+              -0.00730598259293995,
+              0.03349459780680536
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.011727639051051841,
+            "ci95": [
+              -0.007867448230902626,
+              0.034402646485346966
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.00524873220369082,
+            "ci95": [
+              -0.023636729496738607,
+              0.014579085919470937
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.0015399383296326175,
+            "ci95": [
+              -0.018301143087711594,
+              0.013643189097320225
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "sofa_improve_2_48h",
+      "group": "E2",
+      "title": "SOFA decrease $\\geq 2$, 48 h",
+      "patients": 158,
+      "positive_patients": 77,
+      "negative_patients": 126,
+      "scores": {
+        "history_64": {
+          "auroc": 0.671573793618522,
+          "auprc": 0.5880107009760891,
+          "auroc_ci95": [
+            0.6118984260511249,
+            0.7337732267377457
+          ],
+          "auprc_ci95": [
+            0.49399302312248705,
+            0.6847440087940813
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.7394381975851624,
+          "auprc": 0.6446718748580291,
+          "auroc_ci95": [
+            0.6850554438083813,
+            0.7911893372120412
+          ],
+          "auprc_ci95": [
+            0.5683165109175142,
+            0.7271109631853235
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.6935811792041824,
+          "auprc": 0.6068932316763682,
+          "auroc_ci95": [
+            0.633695643889861,
+            0.7547759781421688
+          ],
+          "auprc_ci95": [
+            0.5182028046980953,
+            0.6974872512040163
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.0678644039666404,
+            "ci95": [
+              0.03539739846103643,
+              0.09968513481338344
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.05666117388194003,
+            "ci95": [
+              0.008510585804708098,
+              0.11115934375235714
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.04585701838098,
+            "ci95": [
+              0.013833004226859392,
+              0.07466637753523506
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.03777864318166091,
+            "ci95": [
+              -0.011507703141341424,
+              0.09307831052153799
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": 0.0220073855856604,
+            "ci95": [
+              0.006731610371984021,
+              0.03815963941407931
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.01888253070027912,
+            "ci95": [
+              -0.00243513495253172,
+              0.03583649453870945
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "transfusion_24h",
+      "group": "E2",
+      "title": "Transfusion, 24 h",
+      "patients": 165,
+      "positive_patients": 20,
+      "negative_patients": 160,
+      "scores": {
+        "history_64": {
+          "auroc": 0.7381357735688444,
+          "auprc": 0.27590331786214395,
+          "auroc_ci95": [
+            0.6238498846346652,
+            0.8346153801482246
+          ],
+          "auprc_ci95": [
+            0.11163676722079043,
+            0.442370016123096
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.755926792934667,
+          "auprc": 0.25204778348358686,
+          "auroc_ci95": [
+            0.6521523236846106,
+            0.8326733066436427
+          ],
+          "auprc_ci95": [
+            0.11295612943469016,
+            0.4144607173886855
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.7460310704405193,
+          "auprc": 0.24198540498176788,
+          "auroc_ci95": [
+            0.6349783256881137,
+            0.8416754850088183
+          ],
+          "auprc_ci95": [
+            0.11520820009368873,
+            0.40102524195626027
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.017791019365822613,
+            "ci95": [
+              -0.01584714402976221,
+              0.059462108232042246
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.023855534378557086,
+            "ci95": [
+              -0.06432348413103148,
+              0.026444150967857346
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.009895722494147718,
+            "ci95": [
+              -0.021550549773419837,
+              0.04182404686320412
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.010062378501818986,
+            "ci95": [
+              -0.040588841226822936,
+              0.05157905061093913
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": 0.007895296871674895,
+            "ci95": [
+              -0.00990125719764055,
+              0.03172568873532605
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.03391791288037607,
+            "ci95": [
+              -0.0678903744843435,
+              0.02540494546609993
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "prolonged_imv_96h",
+      "group": "E2",
+      "title": "Prolonged ventilation $\\geq$ 96 h",
+      "patients": 165,
+      "positive_patients": 19,
+      "negative_patients": 153,
+      "scores": {
+        "history_64": {
+          "auroc": 0.8397368421052631,
+          "auprc": 0.4040307359402336,
+          "auroc_ci95": [
+            0.7429447876329215,
+            0.9234078288425365
+          ],
+          "auprc_ci95": [
+            0.2323042622887902,
+            0.6276126308738234
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.8797368421052632,
+          "auprc": 0.43907502849176855,
+          "auroc_ci95": [
+            0.8039165771645738,
+            0.941243285171807
+          ],
+          "auprc_ci95": [
+            0.2699617620151843,
+            0.6503760619194903
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.8431578947368421,
+          "auprc": 0.39717815979121524,
+          "auroc_ci95": [
+            0.7527232607140496,
+            0.9221419262214667
+          ],
+          "auprc_ci95": [
+            0.22777182994792766,
+            0.6286179799511543
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.040000000000000036,
+            "ci95": [
+              -0.003587659275265312,
+              0.09311360196261954
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.03504429255153496,
+            "ci95": [
+              -0.046538218397865774,
+              0.10702709414079017
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.036578947368421044,
+            "ci95": [
+              -0.005825046685340781,
+              0.09097789128082126
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.041896868700553314,
+            "ci95": [
+              -0.05259958989853235,
+              0.1336885792560704
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": 0.0034210526315789913,
+            "ci95": [
+              -0.04180057385423812,
+              0.04867776764363355
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.006852576149018352,
+            "ci95": [
+              -0.10548922642446565,
+              0.09000955230873837
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "tracheostomy_ever",
+      "group": "E2",
+      "title": "Tracheostomy",
+      "patients": 165,
+      "positive_patients": 1,
+      "negative_patients": 164,
+      "scores": {
+        "history_64": {
+          "auroc": 0.41062801932367154,
+          "auprc": 0.008130081300813009,
+          "auroc_ci95": [
+            0.34364664342540446,
+            0.47864175065322884
+          ],
+          "auprc_ci95": [
+            0.007142857142857143,
+            0.029056865464632455
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.3623188405797102,
+          "auprc": 0.007518796992481203,
+          "auroc_ci95": [
+            0.2946923468090516,
+            0.4369314703052567
+          ],
+          "auprc_ci95": [
+            0.006622516556291391,
+            0.02702702702702703
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.5120772946859904,
+          "auprc": 0.00980392156862745,
+          "auroc_ci95": [
+            0.44021927758633517,
+            0.582392221180881
+          ],
+          "auprc_ci95": [
+            0.00847457627118644,
+            0.03529411764705882
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": -0.048309178743961345,
+            "ci95": [
+              -0.10191869300911854,
+              0.0
+            ],
+            "valid_bootstrap_draws": 1206
+          },
+          "auprc": {
+            "difference": -0.0006112843083318064,
+            "ci95": [
+              -0.002848066705182749,
+              0.0
+            ],
+            "valid_bootstrap_draws": 1206
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": -0.1497584541062802,
+            "ci95": [
+              -0.20376934538114008,
+              -0.09672054998141957
+            ],
+            "valid_bootstrap_draws": 1206
+          },
+          "auprc": {
+            "difference": -0.0022851245761462483,
+            "ci95": [
+              -0.008734125246178242,
+              -0.001464281359309893
+            ],
+            "valid_bootstrap_draws": 1206
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": 0.10144927536231885,
+            "ci95": [
+              0.05181347150259069,
+              0.15205961416824793
+            ],
+            "valid_bootstrap_draws": 1206
+          },
+          "auprc": {
+            "difference": 0.0016738402678144419,
+            "ci95": [
+              0.0008712346879050128,
+              0.006917630467260828
+            ],
+            "valid_bootstrap_draws": 1206
+          }
+        }
+      },
+      "warnings": [
+        "Fewer than 5 patients in one class in val",
+        "Fewer than 5 patients in one class in test"
+      ]
+    },
+    {
+      "task": "extubation_failure_48h",
+      "group": "E2",
+      "title": "Extubation failure, 48 h",
+      "patients": 21,
+      "positive_patients": 5,
+      "negative_patients": 19,
+      "scores": {
+        "history_64": {
+          "auroc": 0.53,
+          "auprc": 0.38206349206349205,
+          "auroc_ci95": [
+            0.23809523809523808,
+            0.818409090909091
+          ],
+          "auprc_ci95": [
+            0.09802773980405559,
+            0.7443910256410257
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.53,
+          "auprc": 0.24254754533392303,
+          "auroc_ci95": [
+            0.3,
+            0.7745065789473684
+          ],
+          "auprc_ci95": [
+            0.1,
+            0.5584875650665125
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.53,
+          "auprc": 0.2870588235294118,
+          "auroc_ci95": [
+            0.2617753623188406,
+            0.818409090909091
+          ],
+          "auprc_ci95": [
+            0.09977678571428572,
+            0.6917872807017544
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.0,
+            "ci95": [
+              -0.18181818181818182,
+              0.1764705882352941
+            ],
+            "valid_bootstrap_draws": 1996
+          },
+          "auprc": {
+            "difference": -0.13951594672956902,
+            "ci95": [
+              -0.41432109557109553,
+              0.07520262145262147
+            ],
+            "valid_bootstrap_draws": 1996
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.0,
+            "ci95": [
+              -0.24,
+              0.24258339699516168
+            ],
+            "valid_bootstrap_draws": 1996
+          },
+          "auprc": {
+            "difference": -0.04451127819548878,
+            "ci95": [
+              -0.2828852154897047,
+              0.10910496255407237
+            ],
+            "valid_bootstrap_draws": 1996
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": 0.0,
+            "ci95": [
+              -0.23809523809523808,
+              0.24230429013710747
+            ],
+            "valid_bootstrap_draws": 1996
+          },
+          "auprc": {
+            "difference": -0.09500466853408024,
+            "ci95": [
+              -0.29227469834087483,
+              0.1072863247863248
+            ],
+            "valid_bootstrap_draws": 1996
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "new_rrt_after_24h",
+      "group": "E2",
+      "title": "New renal replacement",
+      "patients": 163,
+      "positive_patients": 5,
+      "negative_patients": 160,
+      "scores": {
+        "history_64": {
+          "auroc": 0.8118811881188119,
+          "auprc": 0.09739212606469244,
+          "auroc_ci95": [
+            0.6162579721462971,
+            0.9455445544554455
+          ],
+          "auprc_ci95": [
+            0.028094234649511603,
+            0.2534261758319709
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.8267326732673268,
+          "auprc": 0.12633998790078646,
+          "auroc_ci95": [
+            0.6089034512887724,
+            0.9551426593482668
+          ],
+          "auprc_ci95": [
+            0.03217008797653959,
+            0.3157854145854146
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.7702970297029703,
+          "auprc": 0.06642574113838481,
+          "auroc_ci95": [
+            0.6147520247071773,
+            0.9096703011422638
+          ],
+          "auprc_ci95": [
+            0.021730971249069343,
+            0.17794315490423815
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.014851485148514865,
+            "ci95": [
+              -0.02479381443298969,
+              0.049999999999999954
+            ],
+            "valid_bootstrap_draws": 1993
+          },
+          "auprc": {
+            "difference": 0.02894786183609402,
+            "ci95": [
+              -0.01745180801755726,
+              0.1121735118116228
+            ],
+            "valid_bootstrap_draws": 1993
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.056435643564356486,
+            "ci95": [
+              -0.09226416219439472,
+              0.2063461538461538
+            ],
+            "valid_bootstrap_draws": 1993
+          },
+          "auprc": {
+            "difference": 0.059914246762401646,
+            "ci95": [
+              0.00025522965899883694,
+              0.17300321592424767
+            ],
+            "valid_bootstrap_draws": 1993
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.04158415841584162,
+            "ci95": [
+              -0.1676724875877418,
+              0.07984242128684203
+            ],
+            "valid_bootstrap_draws": 1993
+          },
+          "auprc": {
+            "difference": -0.030966384926307627,
+            "ci95": [
+              -0.11046305646137632,
+              0.005223607023732476
+            ],
+            "valid_bootstrap_draws": 1993
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "aki_kdigo23_after_24h",
+      "group": "E2",
+      "title": "AKI, KDIGO stage 2--3",
+      "patients": 124,
+      "positive_patients": 44,
+      "negative_patients": 87,
+      "scores": {
+        "history_64": {
+          "auroc": 0.6372815533980583,
+          "auprc": 0.5024083112267651,
+          "auroc_ci95": [
+            0.5357598039215686,
+            0.7364671922786342
+          ],
+          "auprc_ci95": [
+            0.3588945849917074,
+            0.6515275978570859
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.6803883495145631,
+          "auprc": 0.5247270078389916,
+          "auroc_ci95": [
+            0.5819837909992372,
+            0.7741767760459519
+          ],
+          "auprc_ci95": [
+            0.38641417918260523,
+            0.6695326041873858
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.6555339805825243,
+          "auprc": 0.527238842294258,
+          "auroc_ci95": [
+            0.5584556729245096,
+            0.7474727007858348
+          ],
+          "auprc_ci95": [
+            0.38740915692521716,
+            0.659419428004706
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.04310679611650481,
+            "ci95": [
+              0.010197165922497304,
+              0.07710505820626334
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.02231869661222652,
+            "ci95": [
+              -0.025583167846453873,
+              0.07681151610842617
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.02485436893203874,
+            "ci95": [
+              -0.03535228545684782,
+              0.0910362362811312
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.0025118344552663707,
+            "ci95": [
+              -0.08385128363611197,
+              0.08795049998710791
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": 0.01825242718446607,
+            "ci95": [
+              -0.046401642304750565,
+              0.07528183361629867
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.02483053106749289,
+            "ci95": [
+              -0.05818078816958462,
+              0.09539442785177059
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "discharge_home",
+      "group": "E2",
+      "title": "Discharge to home",
+      "patients": 165,
+      "positive_patients": 89,
+      "negative_patients": 92,
+      "scores": {
+        "history_64": {
+          "auroc": 0.7583947583947583,
+          "auprc": 0.7517666662999418,
+          "auroc_ci95": [
+            0.6934057000112406,
+            0.8222044054156973
+          ],
+          "auprc_ci95": [
+            0.6606532939465102,
+            0.8389781824481218
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.7411047411047412,
+          "auprc": 0.7343810990517269,
+          "auroc_ci95": [
+            0.6735453196161354,
+            0.806065383522259
+          ],
+          "auprc_ci95": [
+            0.6401745262348729,
+            0.8257349109607518
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.7521157521157521,
+          "auprc": 0.7582749422265495,
+          "auroc_ci95": [
+            0.685164792794914,
+            0.816730980235217
+          ],
+          "auprc_ci95": [
+            0.6697535284505247,
+            0.8424824760877696
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": -0.017290017290017112,
+            "ci95": [
+              -0.041029925888922895,
+              0.0042333209325397
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.01738556724821494,
+            "ci95": [
+              -0.042214297060090736,
+              0.005765487103363385
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": -0.011011011011010874,
+            "ci95": [
+              -0.03941396867400513,
+              0.016903886938715865
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.02389384317482257,
+            "ci95": [
+              -0.05544642725471355,
+              0.00700991764850813
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.006279006279006238,
+            "ci95": [
+              -0.025586205053538615,
+              0.012329318691653076
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.006508275926607632,
+            "ci95": [
+              -0.01388777454573074,
+              0.027616250105409957
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "los_gt_14d",
+      "group": "E2",
+      "title": "ICU stay $>$ 14 d",
+      "patients": 165,
+      "positive_patients": 11,
+      "negative_patients": 158,
+      "scores": {
+        "history_64": {
+          "auroc": 0.7423481041571494,
+          "auprc": 0.12081480699207078,
+          "auroc_ci95": [
+            0.6160117930849638,
+            0.8643062350665605
+          ],
+          "auprc_ci95": [
+            0.054928282926679096,
+            0.2857241033467931
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.7848332571950662,
+          "auprc": 0.17402064495070857,
+          "auroc_ci95": [
+            0.632416381061183,
+            0.9115936591684569
+          ],
+          "auprc_ci95": [
+            0.07456109752747234,
+            0.4008975897900448
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.7236180904522613,
+          "auprc": 0.13388105614642984,
+          "auroc_ci95": [
+            0.5774857598541809,
+            0.8714027022360356
+          ],
+          "auprc_ci95": [
+            0.053988734350310784,
+            0.30730495663261215
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.04248515303791689,
+            "ci95": [
+              -0.0614556277056277,
+              0.13923268672951408
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.053205837958637786,
+            "ci95": [
+              -0.032574495301818274,
+              0.1984991106406321
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.061215166742804916,
+            "ci95": [
+              -0.013582516339869233,
+              0.14136151514012604
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.04013958880427873,
+            "ci95": [
+              -0.051625730118588876,
+              0.18782482628339756
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.018730013704888027,
+            "ci95": [
+              -0.07903183615268856,
+              0.031746031746031744
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.013066249154359055,
+            "ci95": [
+              -0.031180285830984623,
+              0.06861525953600166
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "vasopressor_free_7d",
+      "group": "E2",
+      "title": "Vasopressor-free, days 2--8",
+      "patients": 162,
+      "positive_patients": 131,
+      "negative_patients": 41,
+      "scores": {
+        "history_64": {
+          "auroc": 0.8288562725006924,
+          "auprc": 0.9237320764589537,
+          "auroc_ci95": [
+            0.7403984522123059,
+            0.900188269634471
+          ],
+          "auprc_ci95": [
+            0.8681675276466331,
+            0.9670630692056933
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.8211021877596234,
+          "auprc": 0.9279575042022933,
+          "auroc_ci95": [
+            0.7364812405573276,
+            0.8925926652712367
+          ],
+          "auprc_ci95": [
+            0.8797934009254259,
+            0.9656920589441077
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.8199944613680421,
+          "auprc": 0.9236355241967116,
+          "auroc_ci95": [
+            0.7289988165680473,
+            0.8933439211391018
+          ],
+          "auprc_ci95": [
+            0.8735796655590103,
+            0.9647750630219883
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": -0.007754084741068978,
+            "ci95": [
+              -0.027286054419194208,
+              0.01349965599256403
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.00422542774333956,
+            "ci95": [
+              -0.014328928910665723,
+              0.02880467323803951
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.0011077263915812985,
+            "ci95": [
+              -0.025781326867664697,
+              0.03279114517204897
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.004321980005581705,
+            "ci95": [
+              -0.0138349785900097,
+              0.024790683058058906
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.008861811132650277,
+            "ci95": [
+              -0.038219560469560404,
+              0.01594956416833307
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -9.655226224214442e-05,
+            "ci95": [
+              -0.022029767158841407,
+              0.018737550014051238
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "hospital_mortality",
+      "group": "E3",
+      "title": "In-hospital mortality",
+      "patients": 165,
+      "positive_patients": 23,
+      "negative_patients": 148,
+      "scores": {
+        "history_64": {
+          "auroc": 0.7991164845384795,
+          "auprc": 0.3132189088041699,
+          "auroc_ci95": [
+            0.70330999398965,
+            0.8816518210948234
+          ],
+          "auprc_ci95": [
+            0.19022588296154255,
+            0.5228146684389805
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.7686584515229017,
+          "auprc": 0.2752498644002141,
+          "auroc_ci95": [
+            0.6713181347150259,
+            0.8541271828658161
+          ],
+          "auprc_ci95": [
+            0.1667850180319737,
+            0.4763735544625764
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.6868170192978377,
+          "auprc": 0.19374204752902832,
+          "auroc_ci95": [
+            0.5638779486538301,
+            0.8052973074046371
+          ],
+          "auprc_ci95": [
+            0.12146356740454967,
+            0.327639670312291
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": -0.030458033015577812,
+            "ci95": [
+              -0.09027160894115188,
+              0.015489815430661776
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.03796904440395582,
+            "ci95": [
+              -0.10921366349769988,
+              0.02902412724089112
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.08184143222506401,
+            "ci95": [
+              -0.012483553558139009,
+              0.18285956872359882
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.08150781687118577,
+            "ci95": [
+              0.006197292940110486,
+              0.21438665668989873
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.11229946524064183,
+            "ci95": [
+              -0.2194956854642684,
+              -0.020159426802635935
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.1194768612751416,
+            "ci95": [
+              -0.2631875171190775,
+              -0.03017375852037694
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "icu_mortality",
+      "group": "E3",
+      "title": "ICU mortality",
+      "patients": 165,
+      "positive_patients": 16,
+      "negative_patients": 154,
+      "scores": {
+        "history_64": {
+          "auroc": 0.7835051546391752,
+          "auprc": 0.2840767261537061,
+          "auroc_ci95": [
+            0.6670454545454546,
+            0.886001098356009
+          ],
+          "auprc_ci95": [
+            0.13332591093212395,
+            0.5526994739034261
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.7612757731958764,
+          "auprc": 0.2857859140969565,
+          "auroc_ci95": [
+            0.6218453188602442,
+            0.8848790682561829
+          ],
+          "auprc_ci95": [
+            0.1375732228525106,
+            0.5501580863387953
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.7947809278350515,
+          "auprc": 0.26095388414245646,
+          "auroc_ci95": [
+            0.6796169105260471,
+            0.8902481700106027
+          ],
+          "auprc_ci95": [
+            0.12962376062490374,
+            0.501237935301824
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": -0.02222938144329889,
+            "ci95": [
+              -0.1008614729078201,
+              0.03645072622010054
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.0017091879432503676,
+            "ci95": [
+              -0.0820804927156598,
+              0.08380536779558499
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": -0.03350515463917514,
+            "ci95": [
+              -0.11539351851851845,
+              0.029429878977841564
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.024832029954500012,
+            "ci95": [
+              -0.06383357115254981,
+              0.12832631374101
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": 0.011275773195876249,
+            "ci95": [
+              -0.023437643086080585,
+              0.04857488337500866
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.023122842011249645,
+            "ci95": [
+              -0.10220794697225655,
+              0.025351967834268282
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "mortality_7d",
+      "group": "E3",
+      "title": "Mortality, 7 d",
+      "patients": 165,
+      "positive_patients": 14,
+      "negative_patients": 155,
+      "scores": {
+        "history_64": {
+          "auroc": 0.7715014577259476,
+          "auprc": 0.30729720153822015,
+          "auroc_ci95": [
+            0.6491473610722153,
+            0.8803131809319928
+          ],
+          "auprc_ci95": [
+            0.10520369947483219,
+            0.5452401531124144
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.717201166180758,
+          "auprc": 0.27692081809117003,
+          "auroc_ci95": [
+            0.6066190264885086,
+            0.8299770147293366
+          ],
+          "auprc_ci95": [
+            0.08439274222385625,
+            0.5033028189947978
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.6778425655976676,
+          "auprc": 0.15700102536644592,
+          "auroc_ci95": [
+            0.5153766851704995,
+            0.8293998837779625
+          ],
+          "auprc_ci95": [
+            0.07081224065679743,
+            0.36107958178288824
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": -0.05430029154518956,
+            "ci95": [
+              -0.11285308157353842,
+              0.006342401155545549
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.030376383447050126,
+            "ci95": [
+              -0.11445041556566059,
+              0.032118324632710006
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.039358600583090375,
+            "ci95": [
+              -0.07446218848688989,
+              0.15080113636363612
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.11991979272472411,
+            "ci95": [
+              -0.07826043952848888,
+              0.2814762364562389
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.09365889212827994,
+            "ci95": [
+              -0.2222438197767145,
+              0.022161440036112885
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.15029617617177424,
+            "ci95": [
+              -0.30832183712653893,
+              0.034730100217011485
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "mortality_14d",
+      "group": "E3",
+      "title": "Mortality, 14 d",
+      "patients": 165,
+      "positive_patients": 20,
+      "negative_patients": 150,
+      "scores": {
+        "history_64": {
+          "auroc": 0.7381578947368421,
+          "auprc": 0.2913994724386774,
+          "auroc_ci95": [
+            0.6242810245310246,
+            0.8429392473893509
+          ],
+          "auprc_ci95": [
+            0.14684930053729278,
+            0.5171734486637336
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.7081578947368421,
+          "auprc": 0.2526027336233032,
+          "auroc_ci95": [
+            0.5989446293720191,
+            0.8207201137809715
+          ],
+          "auprc_ci95": [
+            0.12641852536524495,
+            0.4732620158032727
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.7131578947368421,
+          "auprc": 0.26031243231854373,
+          "auroc_ci95": [
+            0.6015344722774864,
+            0.826706987234346
+          ],
+          "auprc_ci95": [
+            0.12999342538563505,
+            0.4860268066147778
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": -0.030000000000000027,
+            "ci95": [
+              -0.08560295055821371,
+              0.02600217391304338
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.03879673881537421,
+            "ci95": [
+              -0.10910115968204426,
+              0.009172400076601053
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": -0.0050000000000000044,
+            "ci95": [
+              -0.05491697227784885,
+              0.04287267080745329
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.007709698695240519,
+            "ci95": [
+              -0.09195047844421703,
+              0.06716527295333104
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.025000000000000022,
+            "ci95": [
+              -0.0778625060854585,
+              0.02550131548844652
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.03108704012013369,
+            "ci95": [
+              -0.09300073134078493,
+              0.016610242405629957
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "mortality_30d",
+      "group": "E3",
+      "title": "Mortality, 30 d",
+      "patients": 165,
+      "positive_patients": 31,
+      "negative_patients": 144,
+      "scores": {
+        "history_64": {
+          "auroc": 0.7826635429807173,
+          "auprc": 0.4106587734888435,
+          "auroc_ci95": [
+            0.7069044165054803,
+            0.8563594286579617
+          ],
+          "auprc_ci95": [
+            0.27680745698572623,
+            0.5598050441671297
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.7848260947918544,
+          "auprc": 0.42064224492008034,
+          "auroc_ci95": [
+            0.7083568295739349,
+            0.861083902550091
+          ],
+          "auprc_ci95": [
+            0.29197217899139016,
+            0.5726285007611763
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.780140565867724,
+          "auprc": 0.3966787825331376,
+          "auroc_ci95": [
+            0.7041593152048663,
+            0.8536156269901576
+          ],
+          "auprc_ci95": [
+            0.27529607615186624,
+            0.5600569474668955
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.0021625518111371145,
+            "ci95": [
+              -0.04644223530663489,
+              0.045951620370370316
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.009983471431236846,
+            "ci95": [
+              -0.04377996089232029,
+              0.07536912814784595
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.004685528924130433,
+            "ci95": [
+              -0.04765858505564395,
+              0.050683494022947057
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.023963462386942747,
+            "ci95": [
+              -0.04645763081613699,
+              0.07667610754895107
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.0025229771129933187,
+            "ci95": [
+              -0.036402019140989714,
+              0.030180052344464497
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.013979990955705901,
+            "ci95": [
+              -0.05638372399862788,
+              0.05582589418804397
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "mortality_90d",
+      "group": "E3",
+      "title": "Mortality, 90 d",
+      "patients": 165,
+      "positive_patients": 40,
+      "negative_patients": 136,
+      "scores": {
+        "history_64": {
+          "auroc": 0.7634579304372925,
+          "auprc": 0.41370867767449887,
+          "auroc_ci95": [
+            0.6904757988721805,
+            0.8366436099965511
+          ],
+          "auprc_ci95": [
+            0.2992586539568801,
+            0.5630699913551982
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.7506133641218069,
+          "auprc": 0.4055102513425627,
+          "auroc_ci95": [
+            0.6719088963470986,
+            0.8257757071674885
+          ],
+          "auprc_ci95": [
+            0.288375477105601,
+            0.5688213826191705
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.752200894790013,
+          "auprc": 0.3983961218543638,
+          "auroc_ci95": [
+            0.6739369612068965,
+            0.8245321844921033
+          ],
+          "auprc_ci95": [
+            0.288651216432666,
+            0.5399314115910104
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": -0.012844566315485584,
+            "ci95": [
+              -0.0467559494639765,
+              0.018927675544794124
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.008198426331936182,
+            "ci95": [
+              -0.06250842819603712,
+              0.06427530031023211
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": -0.0015875306682060497,
+            "ci95": [
+              -0.05664316167513755,
+              0.057513601664242624
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.007114129488198895,
+            "ci95": [
+              -0.07229144889350135,
+              0.10194744863285794
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.011257035647279534,
+            "ci95": [
+              -0.06600553368675086,
+              0.03939518315444946
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.015312555820135076,
+            "ci95": [
+              -0.11621332522503958,
+              0.08156019359106725
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "los_gt_7d",
+      "group": "E3",
+      "title": "ICU stay $>$ 7 d",
+      "patients": 165,
+      "positive_patients": 21,
+      "negative_patients": 149,
+      "scores": {
+        "history_64": {
+          "auroc": 0.7487911025145069,
+          "auprc": 0.22922978733755922,
+          "auroc_ci95": [
+            0.6380334279315604,
+            0.8472644833396321
+          ],
+          "auprc_ci95": [
+            0.13643368797054767,
+            0.41330884534221596
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.7553191489361702,
+          "auprc": 0.24929605878172592,
+          "auroc_ci95": [
+            0.6457418073804666,
+            0.8520019931744528
+          ],
+          "auprc_ci95": [
+            0.14876171066183622,
+            0.44071922111279876
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.7381528046421664,
+          "auprc": 0.2348556996106481,
+          "auroc_ci95": [
+            0.6295509693018436,
+            0.8388095744896511
+          ],
+          "auprc_ci95": [
+            0.13402599677026136,
+            0.4221590878760315
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.0065280464216633804,
+            "ci95": [
+              -0.05507736269863387,
+              0.06526202684157627
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.0200662714441667,
+            "ci95": [
+              -0.029024686866781935,
+              0.07556561239988713
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": 0.017166344294003877,
+            "ci95": [
+              -0.03958838995777943,
+              0.0707473701512163
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.014440359171077832,
+            "ci95": [
+              -0.04628475104985148,
+              0.07495727443585008
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": -0.010638297872340496,
+            "ci95": [
+              -0.036786604441253354,
+              0.016323149828594508
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.005625912273088868,
+            "ci95": [
+              -0.032566516053377195,
+              0.05219601427652472
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    },
+    {
+      "task": "sepsis_ever",
+      "group": "E3",
+      "title": "Sepsis during the stay",
+      "patients": 165,
+      "positive_patients": 86,
+      "negative_patients": 92,
+      "scores": {
+        "history_64": {
+          "auroc": 0.8052431059506531,
+          "auprc": 0.7975789002591351,
+          "auroc_ci95": [
+            0.7396944606582976,
+            0.8638743768175736
+          ],
+          "auprc_ci95": [
+            0.711637179122023,
+            0.8724069547203764
+          ]
+        },
+        "history_64_plus_prediction_32": {
+          "auroc": 0.807510885341074,
+          "auprc": 0.8165465259371851,
+          "auroc_ci95": [
+            0.7476039875119206,
+            0.8617653163626531
+          ],
+          "auprc_ci95": [
+            0.7421794258914658,
+            0.8836457010284421
+          ]
+        },
+        "history_64_plus_copy_32": {
+          "auroc": 0.8127721335268505,
+          "auprc": 0.8169464455576423,
+          "auroc_ci95": [
+            0.7494837158652382,
+            0.8715982898019542
+          ],
+          "auprc_ci95": [
+            0.7367855786673655,
+            0.8869826997409809
+          ]
+        }
+      },
+      "comparisons": {
+        "prediction_vs_history": {
+          "auroc": {
+            "difference": 0.0022677793904208876,
+            "ci95": [
+              -0.028231160128307627,
+              0.03278945773711773
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.018967625678049993,
+            "ci95": [
+              -0.012326982263596775,
+              0.054736998523777544
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "prediction_vs_copy": {
+          "auroc": {
+            "difference": -0.005261248185776557,
+            "ci95": [
+              -0.0386368003341688,
+              0.025003101736972712
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": -0.00039991962045715646,
+            "ci95": [
+              -0.032517745108206944,
+              0.03309610150984009
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        },
+        "copy_vs_history": {
+          "auroc": {
+            "difference": 0.0075290275761974446,
+            "ci95": [
+              -0.015349241878814401,
+              0.033977856609547386
+            ],
+            "valid_bootstrap_draws": 2000
+          },
+          "auprc": {
+            "difference": 0.01936754529850715,
+            "ci95": [
+              -0.00852043368214896,
+              0.049909037306214335
+            ],
+            "valid_bootstrap_draws": 2000
+          }
+        }
+      },
+      "warnings": []
+    }
+  ]
+}

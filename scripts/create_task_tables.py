@@ -103,7 +103,7 @@ SPECS = [
 ]
 
 
-def render(rows, title, out, stem):
+def render(rows, title, out, stem, methods=METHODS, method_labels=METHOD_LABELS, highlight_index=2):
     fig, ax = plt.subplots(figsize=(15, 5))
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
@@ -130,12 +130,12 @@ def render(rows, title, out, stem):
 
     top, step = .675, .069
     # Shade the proposed comparison row, without implying it is the best.
-    ax.add_patch(patches.Rectangle((left, top-6*step), right-left, 2*step,
+    ax.add_patch(patches.Rectangle((left, top-2*(highlight_index+1)*step), right-left, 2*step,
                  facecolor="#e8f0f7", edgecolor="none", zorder=0))
-    for j,(method,label) in enumerate(zip(METHODS,METHOD_LABELS)):
+    for j,(method,label) in enumerate(zip(methods,method_labels)):
         method_center = top - (2*j+1)*step
         ax.text(left+.005, method_center, label, fontsize=11.3, va="center",
-                fontweight="bold" if j==2 else "normal")
+                fontweight="bold" if j==highlight_index else "normal")
         for k,metric in enumerate(("auroc","auprc")):
             y = top - (2*j+k+.5)*step
             ax.text(.19, y, "AUROC" if metric=="auroc" else "AUPRC",
@@ -143,7 +143,7 @@ def render(rows, title, out, stem):
             for x,row in zip(centers,rows):
                 value = row["scores"][method][metric]
                 # Bold ties at the displayed precision. These are point estimates only.
-                displayed_max = max(round(row["scores"][m][metric],3) for m in METHODS)
+                displayed_max = max(round(row["scores"][m][metric],3) for m in methods)
                 best = round(value,3) == displayed_max
                 ax.text(x,y,f"{value:.3f}",ha="center",va="center",fontsize=11.1,
                         fontfamily="DejaVu Serif", fontweight="bold" if best else "normal")
