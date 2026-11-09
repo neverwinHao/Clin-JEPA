@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import itertools
 import json
 import logging
 import math
@@ -27,14 +28,14 @@ def teacher_forcing_loss(preds: torch.Tensor, targets: torch.Tensor, mask: torch
 
 def rollout_loss(
     model: ACTransformerPredictor, z_states: torch.Tensor, z_static: torch.Tensor,
-    z_actions: torch.Tensor, lengths: torch.Tensor, horizon: int,
+    z_actions: torch.Tensor, lengths: torch.Tensor, horizon: int, start_index: int | None = None,
 ) -> torch.Tensor:
     """Self-fed l1 over ``horizon`` steps from a random start."""
     device = z_states.device
     min_len = int(lengths.min().item())
     if min_len < horizon + 2:
         return torch.tensor(0.0, device=device)
-    k = random.randint(1, min_len - horizon - 1)
+    k = random.randint(1, min_len - horizon - 1) if start_index is None else start_index
 
     z_hist = z_states[:, :k, :].float()
     za_hist = z_actions[:, :k, :].float()
@@ -50,6 +51,41 @@ def rollout_loss(
         za_hist = torch.cat([za_hist, z_actions[:, k + step : k + step + 1, :].float()], dim=1)
         z_current = z_pred
     return total
+
+
+def backward_accumulated(model, batches, device, horizon: int, noise_std: float, precision: str):
+    """Backpropagate one effective batch while retaining the original loss weighting."""
+    if not batches:
+        raise ValueError("at least one microbatch is required")
+    total_tokens = sum(int(batch["padding_mask"][:, 1:].sum()) for batch in batches)
+    total_examples = sum(len(batch["lengths"]) for batch in batches)
+    minimum_length = min(int(batch["lengths"].min()) for batch in batches)
+    has_rollout = minimum_length >= horizon + 2
+    start = random.randint(1, minimum_length - horizon - 1) if has_rollout else None
+    tf_total = roll_total = 0.0
+
+    for batch in batches:
+        token_weight = int(batch["padding_mask"][:, 1:].sum()) / max(total_tokens, 1)
+        example_weight = len(batch["lengths"]) / total_examples
+        z_states = batch["z_states"].to(device)
+        z_actions = batch["z_actions"].to(device)
+        z_static = batch["z_static"].to(device)
+        lengths = batch["lengths"].to(device)
+        mask = batch["padding_mask"].to(device)
+        with torch.amp.autocast("cuda", dtype=torch.bfloat16,
+                                enabled=precision == "bf16" and device.type == "cuda"):
+            preds = model(z_states, z_static, z_actions, lengths, noise_std=noise_std)
+            tf = teacher_forcing_loss(preds, z_states[:, 1:, :].float(), mask[:, 1:])
+            if has_rollout:
+                roll = rollout_loss(model, z_states, z_static, z_actions, lengths, horizon, start_index=start)
+            else:
+                roll = torch.zeros((), device=device)
+            loss = tf * token_weight + roll * example_weight
+        loss.backward()
+        tf_total += tf.item() * token_weight
+        roll_total += roll.item() * example_weight
+        del z_states, z_actions, z_static, lengths, mask, preds, tf, roll, loss
+    return tf_total, roll_total
 
 
 @torch.no_grad()
@@ -88,12 +124,18 @@ def train(config: dict, seed: int, save_dir: Path, max_windows: int | None) -> N
         collate_fn=predictor_collate_fn, num_workers=4, pin_memory=True, drop_last=True,
     )
     val_loader = torch.utils.data.DataLoader(
-        val_dataset, batch_size=cfg["batch_size"], shuffle=False,
+        val_dataset, batch_size=cfg.get("eval_batch_size", cfg["batch_size"]), shuffle=False,
         collate_fn=predictor_collate_fn, num_workers=2,
     )
 
     optimizer = torch.optim.AdamW(model.parameters(), lr=float(cfg["lr"]), weight_decay=float(cfg["weight_decay"]))
-    total_steps = len(train_loader) * cfg["epochs"]
+    accumulation = int(cfg.get("gradient_accumulation_steps", 1))
+    if accumulation < 1:
+        raise ValueError("gradient_accumulation_steps must be positive")
+    steps_per_epoch = len(train_loader) // accumulation
+    if steps_per_epoch == 0:
+        raise ValueError("Not enough training windows for one effective batch")
+    total_steps = steps_per_epoch * cfg["epochs"]
     warmup_steps = int(total_steps * cfg["warmup_ratio"])
 
     def lr_lambda(step: int) -> float:
@@ -109,35 +151,28 @@ def train(config: dict, seed: int, save_dir: Path, max_windows: int | None) -> N
         noise_std = cfg["embedding_noise_std"] * train_dataset[0]["z_states"].float().std().item()
 
     save_dir.mkdir(parents=True, exist_ok=True)
-    logger.info("%.1fM parameters, %d epochs x %d steps, seed %d", n_params / 1e6,
-                cfg["epochs"], len(train_loader), seed)
+    logger.info("%.1fM parameters, %d epochs x %d steps, effective batch %d, seed %d", n_params / 1e6,
+                cfg["epochs"], steps_per_epoch, cfg["batch_size"] * accumulation, seed)
 
     best_val, patience, global_step, t0 = float("inf"), 0, 0, time.time()
     model.train()
     for epoch in range(cfg["epochs"]):
         tf_sum = roll_sum = 0.0
         steps = 0
-        for batch in train_loader:
-            z_states = batch["z_states"].to(device)
-            z_actions = batch["z_actions"].to(device)
-            z_static = batch["z_static"].to(device)
-            lengths = batch["lengths"].to(device)
-            mask = batch["padding_mask"].to(device)
-
-            with torch.amp.autocast("cuda", dtype=torch.bfloat16, enabled=cfg["precision"] == "bf16"):
-                preds = model(z_states, z_static, z_actions, lengths, noise_std=noise_std)
-                tf = teacher_forcing_loss(preds, z_states[:, 1:, :].float(), mask[:, 1:])
-                roll = rollout_loss(model, z_states, z_static, z_actions, lengths, cfg["rollout_horizon"])
-                loss = tf + roll
-            loss.backward()
+        train_iterator = iter(train_loader)
+        for _ in range(steps_per_epoch):
+            batches = list(itertools.islice(train_iterator, accumulation))
+            tf, roll = backward_accumulated(
+                model, batches, device, cfg["rollout_horizon"], noise_std, cfg["precision"],
+            )
             if cfg["gradient_clip"] > 0:
                 torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=cfg["gradient_clip"])
             optimizer.step()
             scheduler.step()
             optimizer.zero_grad()
 
-            tf_sum += tf.item()
-            roll_sum += roll.item()
+            tf_sum += tf
+            roll_sum += roll
             steps += 1
             global_step += 1
             if global_step % config["logging"]["log_every"] == 0:

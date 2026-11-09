@@ -62,6 +62,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+data-duckdb = ["duckdb>=1.1,<2"]
 dev = [
     "ruff>=0.5",
     "pytest>=8",

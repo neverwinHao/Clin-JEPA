@@ -23,3 +23,9 @@ logs/
 *.pt
 *.pth
 *.safetensors
+
+# Generated analytical databases and their journals
+*.duckdb
+*.duckdb.wal
+*.db
+*.db.wal

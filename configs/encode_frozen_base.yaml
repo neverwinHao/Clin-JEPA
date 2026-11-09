@@ -1,0 +1,18 @@
+# Use a pretrained base model directly; no adapter or encoder training is needed.
+model:
+  base_model: ${QWEN3_BASE}
+  frozen_base: true
+  attn_implementation: sdpa
+
+data:
+  trajectory_dir: ${CLIN_JEPA_DATA}/trajectories
+  embedding_dir: ${CLIN_JEPA_DATA}/embeddings
+  max_seq_len: 4096
+  batch_size: 32
+  max_batch_tokens: 4096
+
+encoders:
+  qwen3_base: null
+
+hf:
+  offline: true

@@ -65,6 +65,8 @@ Each stage has a guide in [`docs/`](docs) with its inputs, commands, outputs and
 | 07    | [geometry](docs/07-geometry.md)     | `clin_jepa.geometry`   | Fig. 3, Table 3, Appendix E                                                        |
 | 08    | [downstream](docs/08-downstream.md) | `clin_jepa.downstream` | Fig. 4, Table 4, the per-task tables                                               |
 
+For the frozen pretrained base experiment without SFT, see [frozen base and trajectory preparation](docs/09-frozen-base.md).
+
 ## Layout
 
 ```

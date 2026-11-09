@@ -178,7 +178,9 @@ def write_chunk(
         for shard in shards:
             if shard.windows:
                 path = output_dir / split / f"trajectories_c{chunk_idx:02d}_{shard.shard_idx:03d}.pt"
-                torch.save(shard.finalize(), path)
+                temporary = path.with_suffix(path.suffix + ".tmp")
+                torch.save(shard.finalize(), temporary)
+                temporary.replace(path)
         logger.info(
             "chunk %d %s: %d stays, %d windows",
             chunk_idx, split, len(by_split[split]), sum(len(s.windows) for s in shards),
