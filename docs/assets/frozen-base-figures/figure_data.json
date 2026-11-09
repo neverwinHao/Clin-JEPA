@@ -2861,6 +2861,926 @@
         }
       }
     ],
+    "tasks": [
+      {
+        "task": "circ_failure_8h",
+        "title": "Circulatory failure, 8 h",
+        "group": "E1",
+        "patients": 50,
+        "positive_patients": 5,
+        "negative_patients": 47,
+        "scores": {
+          "history_32": {
+            "auroc": 0.6658536585365854,
+            "auprc": 0.03423696550771011
+          },
+          "history_64": {
+            "auroc": 0.723780487804878,
+            "auprc": 0.040020417115699265
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.6810975609756097,
+            "auprc": 0.033477546495630055
+          }
+        },
+        "delta_auroc": 0.015243902439024293,
+        "delta_auroc_ci95": [
+          -0.03551372366584703,
+          0.07559536354056903
+        ]
+      },
+      {
+        "task": "resp_failure_24h",
+        "title": "Respiratory failure, 24 h",
+        "group": "E1",
+        "patients": 32,
+        "positive_patients": 9,
+        "negative_patients": 31,
+        "scores": {
+          "history_32": {
+            "auroc": 0.5354488279016582,
+            "auprc": 0.14303669603504562
+          },
+          "history_64": {
+            "auroc": 0.41580903373356204,
+            "auprc": 0.10900116776095231
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.5939108061749572,
+            "auprc": 0.1813456149365345
+          }
+        },
+        "delta_auroc": 0.05846197827329902,
+        "delta_auroc_ci95": [
+          -0.02817818721901087,
+          0.13691761969849006
+        ]
+      },
+      {
+        "task": "kidney_failure_48h",
+        "title": "Kidney failure, 48 h",
+        "group": "E1",
+        "patients": 150,
+        "positive_patients": 23,
+        "negative_patients": 142,
+        "scores": {
+          "history_32": {
+            "auroc": 0.6630216693418941,
+            "auprc": 0.2403515739704541
+          },
+          "history_64": {
+            "auroc": 0.6251337613697164,
+            "auprc": 0.15343478938421998
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.6831527554842162,
+            "auprc": 0.20387066708008988
+          }
+        },
+        "delta_auroc": 0.020131086142322063,
+        "delta_auroc_ci95": [
+          -0.054746940520919274,
+          0.11405533373733034
+        ]
+      },
+      {
+        "task": "liver_failure_48h",
+        "title": "Liver failure, 48 h",
+        "group": "E1",
+        "patients": 54,
+        "positive_patients": 5,
+        "negative_patients": 52,
+        "scores": {
+          "history_32": {
+            "auroc": 0.5526908635794744,
+            "auprc": 0.10621555036834361
+          },
+          "history_64": {
+            "auroc": 0.5354192740926158,
+            "auprc": 0.08743295328905476
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.5391739674593241,
+            "auprc": 0.09356971208565952
+          }
+        },
+        "delta_auroc": -0.013516896120150279,
+        "delta_auroc_ci95": [
+          -0.15440574926261874,
+          0.14875847769639197
+        ]
+      },
+      {
+        "task": "hyperglycemia_8h",
+        "title": "Hyperglycemia, 8 h",
+        "group": "E1",
+        "patients": 84,
+        "positive_patients": 19,
+        "negative_patients": 77,
+        "scores": {
+          "history_32": {
+            "auroc": 0.5843971631205674,
+            "auprc": 0.1957609565919599
+          },
+          "history_64": {
+            "auroc": 0.5212765957446808,
+            "auprc": 0.1736789884641847
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.6165248226950354,
+            "auprc": 0.20393072449785252
+          }
+        },
+        "delta_auroc": 0.03212765957446795,
+        "delta_auroc_ci95": [
+          -0.020680249297694308,
+          0.09404355981612916
+        ]
+      },
+      {
+        "task": "sepsis3_8h",
+        "title": "Sepsis-3 onset, 8 h",
+        "group": "E1",
+        "patients": 96,
+        "positive_patients": 3,
+        "negative_patients": 94,
+        "scores": {
+          "history_32": {
+            "auroc": 0.9487179487179487,
+            "auprc": 0.2976190476190476
+          },
+          "history_64": {
+            "auroc": 0.8512820512820513,
+            "auprc": 0.08458141321044546
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.9064102564102564,
+            "auprc": 0.12915923945335708
+          }
+        },
+        "delta_auroc": -0.04230769230769227,
+        "delta_auroc_ci95": [
+          -0.09246031746031742,
+          0.0
+        ]
+      },
+      {
+        "task": "decompensation_24h",
+        "title": "Decompensation (ICU death), 24 h",
+        "group": "E1",
+        "patients": 165,
+        "positive_patients": 5,
+        "negative_patients": 161,
+        "scores": {
+          "history_32": {
+            "auroc": 0.6477272727272727,
+            "auprc": 0.030515114540619795
+          },
+          "history_64": {
+            "auroc": 0.9107954545454545,
+            "auprc": 0.17468154084501658
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.5284090909090909,
+            "auprc": 0.01042513304409741
+          }
+        },
+        "delta_auroc": -0.11931818181818177,
+        "delta_auroc_ci95": [
+          -0.24835275600785367,
+          -0.00636472312730408
+        ]
+      },
+      {
+        "task": "composite_deterioration_24h",
+        "title": "Composite deterioration, 24 h",
+        "group": "E1",
+        "patients": 165,
+        "positive_patients": 19,
+        "negative_patients": 159,
+        "scores": {
+          "history_32": {
+            "auroc": 0.5806062513110971,
+            "auprc": 0.053453538123849814
+          },
+          "history_64": {
+            "auroc": 0.6097650513950074,
+            "auprc": 0.0624823727207941
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.5592091462135514,
+            "auprc": 0.08378589941648934
+          }
+        },
+        "delta_auroc": -0.021397105097545666,
+        "delta_auroc_ci95": [
+          -0.09299160174413501,
+          0.04567237794207421
+        ]
+      },
+      {
+        "task": "vaso_onset_8h",
+        "title": "Vasopressor onset, 8 h",
+        "group": "E2",
+        "patients": 110,
+        "positive_patients": 8,
+        "negative_patients": 108,
+        "scores": {
+          "history_32": {
+            "auroc": 0.44125441696113077,
+            "auprc": 0.025764156897923184
+          },
+          "history_64": {
+            "auroc": 0.6037985865724381,
+            "auprc": 0.038574625988168645
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.48674911660777387,
+            "auprc": 0.04579759791537544
+          }
+        },
+        "delta_auroc": 0.0454946996466431,
+        "delta_auroc_ci95": [
+          -0.08861599538661707,
+          0.17507471065332017
+        ]
+      },
+      {
+        "task": "vaso_onset_24h",
+        "title": "Vasopressor onset, 24 h",
+        "group": "E2",
+        "patients": 110,
+        "positive_patients": 11,
+        "negative_patients": 106,
+        "scores": {
+          "history_32": {
+            "auroc": 0.49159090909090913,
+            "auprc": 0.05296310881163243
+          },
+          "history_64": {
+            "auroc": 0.45636363636363636,
+            "auprc": 0.05076943844546317
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.42204545454545456,
+            "auprc": 0.046408862496011206
+          }
+        },
+        "delta_auroc": -0.06954545454545458,
+        "delta_auroc_ci95": [
+          -0.19344345570386665,
+          0.015693806220839338
+        ]
+      },
+      {
+        "task": "vaso_escalation_24h",
+        "title": "Vasopressor escalation, 24 h",
+        "group": "E2",
+        "patients": 29,
+        "positive_patients": 10,
+        "negative_patients": 27,
+        "scores": {
+          "history_32": {
+            "auroc": 0.4937471051412691,
+            "auprc": 0.12141873129995737
+          },
+          "history_64": {
+            "auroc": 0.6739231125521075,
+            "auprc": 0.18598288148393008
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.5127373784159333,
+            "auprc": 0.11898930935276097
+          }
+        },
+        "delta_auroc": 0.018990273274664127,
+        "delta_auroc_ci95": [
+          -0.11628829071641758,
+          0.17614885114885098
+        ]
+      },
+      {
+        "task": "vaso_liberation_24h",
+        "title": "Vasopressor liberation, 24 h",
+        "group": "E2",
+        "patients": 30,
+        "positive_patients": 19,
+        "negative_patients": 20,
+        "scores": {
+          "history_32": {
+            "auroc": 0.6219825372367745,
+            "auprc": 0.3712769899676124
+          },
+          "history_64": {
+            "auroc": 0.6926040061633282,
+            "auprc": 0.4090164954254206
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.6348228043143298,
+            "auprc": 0.38117589052632717
+          }
+        },
+        "delta_auroc": 0.012840267077555256,
+        "delta_auroc_ci95": [
+          -0.05464067809700343,
+          0.09666413606992565
+        ]
+      },
+      {
+        "task": "imv_onset_24h",
+        "title": "Invasive ventilation onset, 24 h",
+        "group": "E2",
+        "patients": 149,
+        "positive_patients": 12,
+        "negative_patients": 145,
+        "scores": {
+          "history_32": {
+            "auroc": 0.7201136594276436,
+            "auprc": 0.13367906276577318
+          },
+          "history_64": {
+            "auroc": 0.7256951491779988,
+            "auprc": 0.1524931620138053
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.69859955348082,
+            "auprc": 0.19853967311669
+          }
+        },
+        "delta_auroc": -0.02151410594682357,
+        "delta_auroc_ci95": [
+          -0.09493183395426984,
+          0.018965247715247702
+        ]
+      },
+      {
+        "task": "imv_liberation_48h",
+        "title": "Ventilator liberation, 48 h",
+        "group": "E2",
+        "patients": 32,
+        "positive_patients": 27,
+        "negative_patients": 25,
+        "scores": {
+          "history_32": {
+            "auroc": 0.6100338018146236,
+            "auprc": 0.3163639455611348
+          },
+          "history_64": {
+            "auroc": 0.6427088892842316,
+            "auprc": 0.29925154399993326
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.632686947755441,
+            "auprc": 0.3358408147178546
+          }
+        },
+        "delta_auroc": 0.022653145940817354,
+        "delta_auroc_ci95": [
+          -0.03531016042780748,
+          0.08835571421824227
+        ]
+      },
+      {
+        "task": "rrt_onset_48h",
+        "title": "Renal replacement onset, 48 h",
+        "group": "E2",
+        "patients": 163,
+        "positive_patients": 5,
+        "negative_patients": 161,
+        "scores": {
+          "history_32": {
+            "auroc": 0.8863391510450335,
+            "auprc": 0.09341029351500876
+          },
+          "history_64": {
+            "auroc": 0.8425985778926957,
+            "auprc": 0.08542248344369481
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.7906701141995259,
+            "auprc": 0.15224785064607008
+          }
+        },
+        "delta_auroc": -0.09566903684550754,
+        "delta_auroc_ci95": [
+          -0.2238875143504552,
+          0.07315284032958588
+        ]
+      },
+      {
+        "task": "sofa_worsen_2_48h",
+        "title": "SOFA increase $\\geq 2$, 48 h",
+        "group": "E2",
+        "patients": 158,
+        "positive_patients": 48,
+        "negative_patients": 147,
+        "scores": {
+          "history_32": {
+            "auroc": 0.5239300021083702,
+            "auprc": 0.27529740504984646
+          },
+          "history_64": {
+            "auroc": 0.5378563423105519,
+            "auprc": 0.2751563659065046
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.5422395330514775,
+            "auprc": 0.2851133553884949
+          }
+        },
+        "delta_auroc": 0.01830953094310739,
+        "delta_auroc_ci95": [
+          -0.010002417615478952,
+          0.050925020440702615
+        ]
+      },
+      {
+        "task": "sofa_improve_2_48h",
+        "title": "SOFA decrease $\\geq 2$, 48 h",
+        "group": "E2",
+        "patients": 158,
+        "positive_patients": 77,
+        "negative_patients": 126,
+        "scores": {
+          "history_32": {
+            "auroc": 0.6515331314053359,
+            "auprc": 0.5649526243893711
+          },
+          "history_64": {
+            "auroc": 0.671573793618522,
+            "auprc": 0.5880107009760891
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.7273308161487075,
+            "auprc": 0.6348315277589904
+          }
+        },
+        "delta_auroc": 0.07579768474337167,
+        "delta_auroc_ci95": [
+          0.04231574898179221,
+          0.10707300688987542
+        ]
+      },
+      {
+        "task": "transfusion_24h",
+        "title": "Transfusion, 24 h",
+        "group": "E2",
+        "patients": 165,
+        "positive_patients": 20,
+        "negative_patients": 160,
+        "scores": {
+          "history_32": {
+            "auroc": 0.7440519259416898,
+            "auprc": 0.27304274589188166
+          },
+          "history_64": {
+            "auroc": 0.7381357735688444,
+            "auprc": 0.27590331786214395
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.7648861459885082,
+            "auprc": 0.2614409673230083
+          }
+        },
+        "delta_auroc": 0.020834220046818452,
+        "delta_auroc_ci95": [
+          -0.006066093497219105,
+          0.05019681919191554
+        ]
+      },
+      {
+        "task": "prolonged_imv_96h",
+        "title": "Prolonged ventilation $\\geq$ 96 h",
+        "group": "E2",
+        "patients": 165,
+        "positive_patients": 19,
+        "negative_patients": 153,
+        "scores": {
+          "history_32": {
+            "auroc": 0.8442105263157895,
+            "auprc": 0.3523124977836058
+          },
+          "history_64": {
+            "auroc": 0.8397368421052631,
+            "auprc": 0.4040307359402336
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.878421052631579,
+            "auprc": 0.4088541797233781
+          }
+        },
+        "delta_auroc": 0.03421052631578947,
+        "delta_auroc_ci95": [
+          -0.003997437183129979,
+          0.07780650154798764
+        ]
+      },
+      {
+        "task": "tracheostomy_ever",
+        "title": "Tracheostomy",
+        "group": "E2",
+        "patients": 165,
+        "positive_patients": 1,
+        "negative_patients": 164,
+        "scores": {
+          "history_32": {
+            "auroc": 0.6135265700483092,
+            "auprc": 0.012345679012345678
+          },
+          "history_64": {
+            "auroc": 0.41062801932367154,
+            "auprc": 0.008130081300813009
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.43961352657004826,
+            "auprc": 0.008547008547008548
+          }
+        },
+        "delta_auroc": -0.17391304347826098,
+        "delta_auroc_ci95": [
+          -0.23744266055045865,
+          -0.11308199586842523
+        ]
+      },
+      {
+        "task": "extubation_failure_48h",
+        "title": "Extubation failure, 48 h",
+        "group": "E2",
+        "patients": 21,
+        "positive_patients": 5,
+        "negative_patients": 19,
+        "scores": {
+          "history_32": {
+            "auroc": 0.65,
+            "auprc": 0.4259663865546219
+          },
+          "history_64": {
+            "auroc": 0.53,
+            "auprc": 0.38206349206349205
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.44,
+            "auprc": 0.19854700854700857
+          }
+        },
+        "delta_auroc": -0.21000000000000002,
+        "delta_auroc_ci95": [
+          -0.5071739130434783,
+          0.017149122807017556
+        ]
+      },
+      {
+        "task": "new_rrt_after_24h",
+        "title": "New renal replacement",
+        "group": "E2",
+        "patients": 163,
+        "positive_patients": 5,
+        "negative_patients": 160,
+        "scores": {
+          "history_32": {
+            "auroc": 0.801980198019802,
+            "auprc": 0.10379515662534533
+          },
+          "history_64": {
+            "auroc": 0.8118811881188119,
+            "auprc": 0.09739212606469244
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.8435643564356436,
+            "auprc": 0.11570889894419306
+          }
+        },
+        "delta_auroc": 0.04158415841584162,
+        "delta_auroc_ci95": [
+          -0.09437710437710438,
+          0.21510874846380273
+        ]
+      },
+      {
+        "task": "aki_kdigo23_after_24h",
+        "title": "AKI, KDIGO stage 2--3",
+        "group": "E2",
+        "patients": 124,
+        "positive_patients": 44,
+        "negative_patients": 87,
+        "scores": {
+          "history_32": {
+            "auroc": 0.6722330097087379,
+            "auprc": 0.5380590503382293
+          },
+          "history_64": {
+            "auroc": 0.6372815533980583,
+            "auprc": 0.5024083112267651
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.6939805825242719,
+            "auprc": 0.5833177226431967
+          }
+        },
+        "delta_auroc": 0.021747572815533966,
+        "delta_auroc_ci95": [
+          -0.02302919394045894,
+          0.06595974302377298
+        ]
+      },
+      {
+        "task": "discharge_home",
+        "title": "Discharge to home",
+        "group": "E2",
+        "patients": 165,
+        "positive_patients": 89,
+        "negative_patients": 92,
+        "scores": {
+          "history_32": {
+            "auroc": 0.6871416871416872,
+            "auprc": 0.6775566244992621
+          },
+          "history_64": {
+            "auroc": 0.7583947583947583,
+            "auprc": 0.7517666662999418
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.6938756938756938,
+            "auprc": 0.690528646618002
+          }
+        },
+        "delta_auroc": 0.006734006734006592,
+        "delta_auroc_ci95": [
+          -0.029179910139731577,
+          0.03421051652874764
+        ]
+      },
+      {
+        "task": "los_gt_14d",
+        "title": "ICU stay $>$ 14 d",
+        "group": "E2",
+        "patients": 165,
+        "positive_patients": 11,
+        "negative_patients": 158,
+        "scores": {
+          "history_32": {
+            "auroc": 0.7624486066697123,
+            "auprc": 0.13076207857668143
+          },
+          "history_64": {
+            "auroc": 0.7423481041571494,
+            "auprc": 0.12081480699207078
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.7848332571950662,
+            "auprc": 0.19727300729546246
+          }
+        },
+        "delta_auroc": 0.02238465052535399,
+        "delta_auroc_ci95": [
+          -0.06855746377805202,
+          0.12076539855072459
+        ]
+      },
+      {
+        "task": "vasopressor_free_7d",
+        "title": "Vasopressor-free, days 2--8",
+        "group": "E2",
+        "patients": 162,
+        "positive_patients": 131,
+        "negative_patients": 41,
+        "scores": {
+          "history_32": {
+            "auroc": 0.7888396566048187,
+            "auprc": 0.9189299460679827
+          },
+          "history_64": {
+            "auroc": 0.8288562725006924,
+            "auprc": 0.9237320764589537
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.7761008031016339,
+            "auprc": 0.9132655550392067
+          }
+        },
+        "delta_auroc": -0.012738853503184822,
+        "delta_auroc_ci95": [
+          -0.040432662402909145,
+          0.014315495760959458
+        ]
+      },
+      {
+        "task": "hospital_mortality",
+        "title": "In-hospital mortality",
+        "group": "E3",
+        "patients": 165,
+        "positive_patients": 23,
+        "negative_patients": 148,
+        "scores": {
+          "history_32": {
+            "auroc": 0.7561032318065567,
+            "auprc": 0.30536847641320297
+          },
+          "history_64": {
+            "auroc": 0.7991164845384795,
+            "auprc": 0.3132189088041699
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.7386654266449663,
+            "auprc": 0.2616903281442976
+          }
+        },
+        "delta_auroc": -0.017437805161590436,
+        "delta_auroc_ci95": [
+          -0.06741527727770391,
+          0.03284253207455824
+        ]
+      },
+      {
+        "task": "icu_mortality",
+        "title": "ICU mortality",
+        "group": "E3",
+        "patients": 165,
+        "positive_patients": 16,
+        "negative_patients": 154,
+        "scores": {
+          "history_32": {
+            "auroc": 0.7554768041237113,
+            "auprc": 0.2691482564537402
+          },
+          "history_64": {
+            "auroc": 0.7835051546391752,
+            "auprc": 0.2840767261537061
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.757409793814433,
+            "auprc": 0.3025221362930852
+          }
+        },
+        "delta_auroc": 0.0019329896907216426,
+        "delta_auroc_ci95": [
+          -0.04252829551944348,
+          0.04452293477666607
+        ]
+      },
+      {
+        "task": "mortality_7d",
+        "title": "Mortality, 7 d",
+        "group": "E3",
+        "patients": 165,
+        "positive_patients": 14,
+        "negative_patients": 155,
+        "scores": {
+          "history_32": {
+            "auroc": 0.7044460641399417,
+            "auprc": 0.1866105643253232
+          },
+          "history_64": {
+            "auroc": 0.7715014577259476,
+            "auprc": 0.30729720153822015
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.5962099125364432,
+            "auprc": 0.0904486432171166
+          }
+        },
+        "delta_auroc": -0.10823615160349853,
+        "delta_auroc_ci95": [
+          -0.2305171903516993,
+          0.011884715025906696
+        ]
+      },
+      {
+        "task": "mortality_14d",
+        "title": "Mortality, 14 d",
+        "group": "E3",
+        "patients": 165,
+        "positive_patients": 20,
+        "negative_patients": 150,
+        "scores": {
+          "history_32": {
+            "auroc": 0.7089473684210527,
+            "auprc": 0.21614192063401846
+          },
+          "history_64": {
+            "auroc": 0.7381578947368421,
+            "auprc": 0.2913994724386774
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.641842105263158,
+            "auprc": 0.1576135525213492
+          }
+        },
+        "delta_auroc": -0.06710526315789467,
+        "delta_auroc_ci95": [
+          -0.1536031430812984,
+          0.023668938682823198
+        ]
+      },
+      {
+        "task": "mortality_30d",
+        "title": "Mortality, 30 d",
+        "group": "E3",
+        "patients": 165,
+        "positive_patients": 31,
+        "negative_patients": 144,
+        "scores": {
+          "history_32": {
+            "auroc": 0.7646422778879077,
+            "auprc": 0.37713009490740323
+          },
+          "history_64": {
+            "auroc": 0.7826635429807173,
+            "auprc": 0.4106587734888435
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.7729320598306001,
+            "auprc": 0.403738611941862
+          }
+        },
+        "delta_auroc": 0.008289781942692365,
+        "delta_auroc_ci95": [
+          -0.04119860847564831,
+          0.060748106351888036
+        ]
+      },
+      {
+        "task": "mortality_90d",
+        "title": "Mortality, 90 d",
+        "group": "E3",
+        "patients": 165,
+        "positive_patients": 40,
+        "negative_patients": 136,
+        "scores": {
+          "history_32": {
+            "auroc": 0.7192957136671958,
+            "auprc": 0.3622390039495783
+          },
+          "history_64": {
+            "auroc": 0.7634579304372925,
+            "auprc": 0.41370867767449887
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.7407995381728966,
+            "auprc": 0.4246225097626683
+          }
+        },
+        "delta_auroc": 0.021503824505700764,
+        "delta_auroc_ci95": [
+          -0.04914858516986177,
+          0.08216993627149884
+        ]
+      },
+      {
+        "task": "los_gt_7d",
+        "title": "ICU stay $>$ 7 d",
+        "group": "E3",
+        "patients": 165,
+        "positive_patients": 21,
+        "negative_patients": 149,
+        "scores": {
+          "history_32": {
+            "auroc": 0.7647485493230175,
+            "auprc": 0.24014001760258147
+          },
+          "history_64": {
+            "auroc": 0.7487911025145069,
+            "auprc": 0.22922978733755922
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.7468568665377177,
+            "auprc": 0.2622927860516926
+          }
+        },
+        "delta_auroc": -0.017891682785299845,
+        "delta_auroc_ci95": [
+          -0.08238045738045738,
+          0.03359713791839923
+        ]
+      },
+      {
+        "task": "sepsis_ever",
+        "title": "Sepsis during the stay",
+        "group": "E3",
+        "patients": 165,
+        "positive_patients": 86,
+        "negative_patients": 92,
+        "scores": {
+          "history_32": {
+            "auroc": 0.784833091436865,
+            "auprc": 0.7743739936616332
+          },
+          "history_64": {
+            "auroc": 0.8052431059506531,
+            "auprc": 0.7975789002591351
+          },
+          "history_32_plus_future_32": {
+            "auroc": 0.794267053701016,
+            "auprc": 0.7981913806450265
+          }
+        },
+        "delta_auroc": 0.009433962264151052,
+        "delta_auroc_ci95": [
+          -0.030818262443312032,
+          0.049875748587843785
+        ]
+      }
+    ],
     "policy": "synthetic no-interventions after hour 23",
     "caveat": "task-unweighted exploratory mean; small and imbalanced samples"
   }

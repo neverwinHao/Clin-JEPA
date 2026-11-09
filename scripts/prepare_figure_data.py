@@ -106,7 +106,24 @@ def downstream_data(exp):
             scores[method] = {"auroc": float(np.mean([x["models"][method]["test_auroc"] for x in tasks])),
                               "auprc": float(np.mean([x["models"][method]["test_auprc"] for x in tasks]))}
         groups.append({"group": group, "tasks": len(tasks), "scores": scores})
-    return {"groups": groups, "policy": "synthetic no-interventions after hour 23",
+    records = []
+    for task in data["tasks"]:
+        if task["status"] != "ok":
+            continue
+        counts = task["counts"]["test"]
+        scores = {method: {"auroc": float(task["models"][method]["test_auroc"]),
+                           "auprc": float(task["models"][method]["test_auprc"])} for method in METHODS}
+        comparison = task["future_minus"]["history_32"]
+        records.append({"task": task["task"], "title": task["title"], "group": task["benchmark"],
+                        "patients": int(counts["patients"]),
+                        "positive_patients": int(counts["positive_patients"]),
+                        "negative_patients": int(counts["negative_patients"]), "scores": scores,
+                        "delta_auroc": float(comparison["auroc_difference"]),
+                        "delta_auroc_ci95": [float(v) for v in comparison["auroc_difference_ci95"]]})
+    if len(records) != 34:
+        raise ValueError("Expected all 34 sampled clinical tasks to be present")
+    return {"groups": groups, "tasks": records,
+            "policy": "synthetic no-interventions after hour 23",
             "caveat": "task-unweighted exploratory mean; small and imbalanced samples"}
 
 
